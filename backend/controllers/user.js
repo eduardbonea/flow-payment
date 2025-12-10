@@ -39,7 +39,7 @@ const controller = {
                 username: newUsername,
             };
             const patchUsername = await userDb.update(
-                {username: newUsername },
+                { username: newUsername },
                 {
                     where: {
                         id: userId

@@ -1,10 +1,24 @@
+require('dotenv').config();
 const express = require('express');
+const cors = require ('cors');
+
 const app = express();
 const db = require('./models').db;
 const router = require('./routes');
-const port = 3111;
 
+const authMiddleware = require('./middleware/auth');
+
+const port = process.env.PORT || 3111;
+
+app.use(cors({ origin: 'http://localhost:3000' }));
 app.use(express.json());
+
+app.get('/api/dashboard', authMiddleware, (req, res) => {
+    res.status(200).json({ 
+        message: `Hello, ${req.user.username}! This is protected data.`,
+        yourDecodedToken: req.user
+    });
+});
 
 app.get('/', (req, res) => {
 	res.send('Backend works!');

@@ -1,3 +1,4 @@
-const userController = require("./user");
+const userController = require('./user');
+const paymentController = require('./payments');
 
-module.exports = {userController};
+module.exports = {userController, paymentController};
