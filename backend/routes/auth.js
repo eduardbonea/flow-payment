@@ -3,6 +3,9 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const db = require('../models').db; 
 
+const userDb = require('../models').userModel;
+const user = userDb
+
 const JWTSecret = process.env.JWT_SECRET;
 
 router.post('/login', async (req, res) => {
@@ -10,16 +13,18 @@ router.post('/login', async (req, res) => {
 	const password = req.body.password;
 
 	try{
-		const foundUser = await db.findone({ 
-			username: username,
-			password: password
+		const foundUser = await user.findOne({
+			where: { 
+				username: username,
+				password: password
+			}
 		});
 		if(foundUser) {
 			console.log('Found', foundUser);
             const token = jwt.sign({ username: foundUser.username}, JWTSecret, {expiresIn: '1h'});
             res.status(200).json({token});
 		} else {
-			console.log('your credentials are incorrect');
+			console.log('Authentication failed');
 			res.status(401).json('Client error!');
 		};
 	}catch(err) {

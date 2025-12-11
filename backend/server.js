@@ -10,7 +10,7 @@ const authMiddleware = require('./middleware/auth');
 
 const port = process.env.PORT || 3111;
 
-app.use(cors({ origin: 'http://localhost:3000' }));
+app.use(cors({ origin: 'http://localhost:5173' }));
 app.use(express.json());
 
 app.get('/api/dashboard', authMiddleware, (req, res) => {
@@ -28,7 +28,7 @@ app.use('/api', router);
 
 app.get('/reset', async (req,res) => {
 	await db.sync({ force: true });
-	res.status(200).send('database has been reset');
+	res.status(200).send('The database has been successfully reset ');
 });
 
 app.listen(port, () => {

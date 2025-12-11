@@ -7,7 +7,7 @@
 
 Acesta proiect este realizat în cadrul opționalului de Tehnologii Web și simulează o aplicație de solicitare a plăților, similar cu [Tikkie](https://dutchreview.com/expat/tikkie-netherlands/). Utilizatorii pot crea cereri de plată introducând suma și motivul, generând un cod QR pe care prietenii îl pot scana pentru a accepta sau refuza plata. Aplicația urmărește statusul fiecărei cereri și trimite notificări push requester-ului atunci când requestee-ii acționează asupra cererii.
 
-**URL Aplicație:** [TBA]
+**URL Aplicație:** [Flow Payment](https://flow-payment.eduardbonea.com)
 
 ---
 
@@ -80,7 +80,7 @@ Pentru a rula acest proiect local, vei avea nevoie de Node.js instalat dar și d
     * Va trebui să navighezi în folderul `backend` și să instalezi dependințele.
 
     ```bash
-    cd backend
+    cd ../backend
     npm i
     ```
     * Va trebui să-ți creezi o bază de date numită 'flow' în Laragon sau XAMPP prin intermediul interfaței aplicației.
@@ -98,7 +98,7 @@ Pentru a rula acest proiect local, vei avea nevoie de Node.js instalat dar și d
 | **Reset** | Get | /reset |
 | **User** | Post | /api/user/createUser |
 
-> **⚠️ Notă Importantă:**nu uita să-ți pornești mediul de dezvoltare local, fie el XAMPP, Laragon sau alt program similar **. Altfel, baza de date nu va putea fi accesată de către backend iar rutele nu vor putea fi apelate
+> ⚠️ Notă Importantă: nu uita să-ți pornești mediul de dezvoltare local, fie el XAMPP, Laragon sau alt program similar. Altfel, baza de date nu va putea fi accesată de către backend iar rutele nu vor putea fi apelate
 
 ## 🌐 Hostarea Web - DevOps
 
@@ -115,7 +115,7 @@ Aplicația **Flow Payment** este găzduită prin intermediul [DigitalOcean](http
 * **Frontend-ul** (Arrow.js + Vite build) este servit de Nginx ca fișiere statice.  
 * **Backend-ul** (Node.js + Express) rulează ca proces gestionat de PM2 și expune API-ul RESTful pentru frontend.  
 * **DNS și SSL:** Cloudflare gestionează domeniul și oferă SSL gratuit pentru securizarea conexiunilor HTTPS.  
-* **Acces public:** Aplicația este accesibilă prin domeniul configurat în Cloudflare (ex: `https://flow-payment.com`).
+* **Acces public:** Aplicația este accesibilă prin domeniul configurat în Cloudflare (`https://flow-payment.eduardbonea.com`).
 
 ## 👨🏻‍💻👩🏻‍💻 Membrii echipei
 
