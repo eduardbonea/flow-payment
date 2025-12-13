@@ -1,15 +1,30 @@
 body {
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #f0f0f0; 
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #211A1D; 
+}
+
+#title{
+    text-align: center;
+    padding-top: 25px;
+    padding-bottom: 2vh;
+}
+
+#logout{
+    margin-top: auto;
+    margin-inline-start: 90%;
+    border-radius: 10px;
+    height: 5vh;
+    width: 5vw;
+    background-color: #cad5ca;
 }
 
 .dashboard-pane{
     width: 90vw;
-    height: 80vh;
-    background-color: aqua;
+    min-height: 80vh;
+    background-color: #6320EE;
 }
 
 .dashboard-content {
@@ -18,8 +33,67 @@ grid-template-columns: repeat(6, 1fr);
 grid-template-rows: repeat(7, 1fr);
 grid-column-gap: 0px;
 grid-row-gap: 0px;
+min-height: 65vh;
 }
 
 .account { grid-area: 2 / 2 / 5 / 4; }
 .buttons { grid-area: 6 / 2 / 7 / 4; }
 .qr-content { grid-area: 3 / 5 / 6 / 6; }
+
+.account {
+    background-color: #8075FF;
+    border-radius: 10px;
+}
+
+#account-title{
+    text-align: center;
+    padding-top: 25px;
+    padding-bottom: 2vh;
+}
+
+.buttons {
+    background-color: #8075FF;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 10em;
+}
+
+#button-send {
+    border-radius: 10px;
+    margin-top: 2.5vh;
+    height: 5vh;
+    width: 5vw;
+    background-color: #cad5ca;
+}
+
+#button-recive {
+    border-radius: 10px;
+    margin-top: 2.5vh;
+    height: 5vh;
+    width: 5vw;
+    background-color: #cad5ca
+}
+
+.qr-content{
+    background-color: #8075FF;
+    border-radius: 10px;
+}
+
+#qr-title{
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 2vh;
+}
+
+.qr{
+    height: 15vh;
+    width: 15vw;
+}
+
+#qr-button{
+    border-radius: 10px;
+    height: 5vh;
+    width: 5vw;
+    margin-left: 5vw;
+}
