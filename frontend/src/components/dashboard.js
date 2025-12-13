@@ -3,37 +3,42 @@ import { appState, navigateTo } from '../app/app.js';
 import '../styles/dashboard.css';
 
 const handleLogout = () => {
-
-    appState.isAuthenticated = false;
-    appState.authToken = null;
-    
-    navigateTo('login');
-    
     localStorage.removeItem('authToken');
+    appState.authToken = null;
+    appState.isAuthenticated = false;
+    navigateTo('login');
+};
+
+const paymentSend = () => {
+    navigateTo('paymentSend'); 
+};
+
+const paymentRequest = () => {
+    navigateTo('paymentRequest'); 
 };
 
 const dashboard = html`
 <div class="dashboard-pane">
-    <h2>Dashboard</h2>
+    <h2 id = "title">Dashboard</h2>
     
     <div class="dashboard-content">
         <div class="account"> 
-            <h3>Payment details</h3>
+            <h3 id = "account-title">Payment details</h3>
         </div>
         <div class="buttons"> 
-            <button>Send</button>
-            <button>Recive</button>
+            <button id = "button-send" @click="${paymentSend}">Send</button>
+            <button id = "button-recive"@click="${paymentRequest}">Recive</button>
         </div>
         <div class="qr-content">
-            <h2>Scan me to recive money</h2> 
+            <h2 id = "qr-title">Scan me to recive money</h2> 
             <div class = "qr">
                 <p>insert qr code</p>
             </div>
-            <button>refresh qr</button>
+            <button id = "qr-button">refresh qr</button>
         </div>
     </div>
     
-    <button @click="${handleLogout}">Deconectare</button>
+    <button id = "logout" @click="${handleLogout}">Logout</button>
 </div>
 `;
 

@@ -1,26 +1,26 @@
 import { html, reactive } from '@arrow-js/core';
 import '../styles/app.css';
 
-// 1. Definim și EXPORTĂM starea globală (folosită de alte componente)
+const initialAuthToken = localStorage.getItem('authToken');
+
 export const appState = reactive({
-    isAuthenticated: false,
-    currentPage: 'login', 
-    authToken: localStorage.getItem('authToken') || null 
+    isAuthenticated: !!initialAuthToken,
+    currentPage: initialAuthToken ? 'dashboard' : 'login', 
+    authToken: initialAuthToken
 });
 
-// 2. Definim și EXPORTĂM funcția de navigare
 export const navigateTo = (page) => {
     appState.currentPage = page;
+    console.log(`Navigating to: ${page}`);
 };
 
-// 3. Importăm componentele
 import Login from '../components/login.js'; 
-// 🟢 Import NOU
-import Dashboard from '../components/dashboard.js'; 
+import Dashboard from '../components/dashboard.js';
+import PaymentSend from '../components/paymentSend.js'
+import PaymentRequest from '../components/paymentRequest.js' 
 
 const root = document.getElementById('app');
 
-// Logica de randare a întregii aplicații
 const AppContent = html`
     <div class="container">
         <h1>Flow Payment</h1>
@@ -29,13 +29,24 @@ const AppContent = html`
 
         ${() => {
             
-            // Verificăm ce pagină trebuie să afișăm:
-            if (appState.currentPage === 'dashboard') {
-                return Dashboard; // 🟢 Afișează componenta Dashboard
+            if (!appState.isAuthenticated) {
+                appState.currentPage = 'login'; 
+                return Login;
             } 
             
-            else { // Implicit, afișăm Login
-                return Login; 
+            switch (appState.currentPage) {
+                case 'dashboard':
+                    return Dashboard;
+                
+                case 'paymentSend':
+                    return PaymentSend;
+                    
+                case 'paymentRequest':
+                    return PaymentRequest;
+                    
+                case 'login':
+                default:
+                    return Dashboard;
             }
         }}
 

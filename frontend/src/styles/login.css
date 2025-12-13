@@ -3,12 +3,49 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f0f0f0; 
+}
+
+#title-login{
+  margin: 8px;
+  text-align: center;
 }
 
 .container {
-  background-color: white;
+  background-color: #6320EE;
   padding: 40px;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.login-pane {
+    background-color: var(--secondary-color);
+}
+
+.login-pane label {
+    font-weight: bold;
+    color: var(--text-color-light); 
+}
+
+.login-pane input[type="text"],
+.login-pane input[type="password"] {
+    width: 100%;
+    padding: 14px 12px;
+    margin: 10px; 
+    border: 2px solid transparent; 
+    border-radius: 8px;
+    box-sizing: border-box;
+    background-color: #cad5ca;
+    color: var(--text-color-dark);
+    font-size: 17px;
+    transition: all 0.3s ease;
+    margin-bottom: 5px; 
+}
+
+#login-button{
+  height: 4vh;
+  width: 5vw;
+  margin-bottom: 15px;
+  background-color: #cad5ca;
+  border-radius: 10px;
+  
 }

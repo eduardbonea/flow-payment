@@ -1,0 +1,84 @@
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #211A1D;
+}
+
+.container {
+  background-color: #6320EE; 
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.main-content {
+    background-color: #8075FF;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 400px;
+}
+
+#title {
+    color: #F0F0F0;
+    text-align: center;
+    margin: 8px;
+    margin-bottom: 25px;
+}
+
+.main-content form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.main-content label {
+    font-weight: 700;
+    color: var(--text-color-light); 
+    font-size: 1rem;
+    display: block;
+    margin-bottom: -10px;
+}
+
+.main-content input[type="text"],
+.main-content input[type="password"],
+.main-content input[type="email"] { 
+    width: 100%;
+    padding: 14px 12px;
+    margin: 0; 
+    
+    border: 2px solid transparent; 
+    border-radius: 8px;
+    box-sizing: border-box;
+    background-color: #CAD5CA;
+    color: #211A1D;  
+    font-size: 17px;
+    transition: all 0.3s ease;
+}
+
+.main-content input:focus {
+    border-color: #6320EE;  
+    box-shadow: 0 0 0 3px rgba(99, 32, 238, 0.4);
+    outline: none;
+}
+
+#signin-button {
+    margin-top: 25px;
+    padding: 14px 20px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: #CAD5CA;
+    color: #211A1D;  
+    width: 100%; 
+    transition: background-color 0.3s;
+}
+
+#signin-button:hover {
+    background-color: #b7c1b7;
+}
