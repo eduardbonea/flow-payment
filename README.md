@@ -40,65 +40,85 @@ Proiectul este construit folosind următoarele tehnologii:
 
 ---
 
-## 🚀 Instalare și Rulare Locală
+## 🚀 Instalare și Rulare
 
-Pentru a rula acest proiect local, vei avea nevoie de Node.js instalat dar și de un client pentru baze de date și de asemenea un IDE pentru modificări în codul sursă
+Utilizarea Docker este cea mai simplă și rapidă metodă, eliminând cerințele de instalare Node.js, MySQL sau ArrowJS direct pe sistemul personal
 
-**Windows**
+### 0. Precondiții Esențiale
 
-* **[Visual Studio Code](https://code.visualstudio.com/download)**: Open source IDE
-* **[NVM](https://github.com/coreybutler/nvm-windows)**: este un utilitar care permite instalarea și gestionarea mai multor versiuni de Node.js pe același calculator.
-* **[Laragon](https://laragon.org/download)**: Laragon este un mediu de dezvoltare local complet pentru Windows, ideal pentru proiecte web PHP, Node.js și baze de date MySQL/PostgreSQL
+* **[Docker Desktop](https://www.docker.com/products/docker-desktop)** 
 
-**Linux**
+### 1. Clonarea Proiectului
 
-* **[Visual Studio Code](https://code.visualstudio.com/download)**: Open source IDE
-* **[NVM](https://github.com/nvm-sh/nvm?tab=readme-ov-file#installing-and-updating)**: este un utilitar care permite instalarea și gestionarea mai multor versiuni de Node.js pe același calculator.
-* **[XAMPP](https://www.apachefriends.org/)**: XAMPP este un mediu de dezvoltare local complet, cu server web, baze de date și suport PHP/Perl, pentru testarea aplicațiilor web pe calculatorul personal
+Deschide terminalul și clonează repository-ul:
 
-### 1. Configurare locală
+```bash
+git clone [https://github.com/eduardbonea/flow-payment.git](https://github.com/eduardbonea/flow-payment.git)
+cd flow-payment
+````
 
-1.  Clonează repository-ul și navigheaza în folderul 'flow-payment':
+### 2\. Configurare Variabile de Mediu
 
-    ```bash
-    git clone [https://github.com/eduardbonea/movie-app.git](https://github.com/eduardbonea/movie-app.git)
-    cd flow-payment
-    ```
- 
-2.  Configurează frontend-ul:
+Variabilele sunt definite în `docker-compose.yml` ca să fie importate din `.env`, este nevoie să creați un fișier `.env` în directorul `backend/` cu următoarea structură:
 
-    * Va trebui să navighezi în folderul `frontend` și să instalezi dependințele.
+```bash
+# BACKEND
+PORT=
+JWT_SECRET=
 
-    ```bash
-    cd frontend
-    npm i
-    npm run dev
-    ```
+#DOCKER
+MYSQL_ROOT_PASSWORD=
 
-4.  Configurează backend-ul:
-   
-    * Va trebui să navighezi în folderul `backend` și să instalezi dependințele.
+#DATABASE
+MYSQL_DATABASE=
+MYSQL_USER=
+MYSQL_PASSWORD=
+DB_HOST=database
+DB_DIALECT=mysql
+DB_CHARSET=utf8
+```
 
-    ```bash
-    cd ../backend
-    npm i
-    ```
-    * Va trebui să-ți creezi o bază de date numită 'flow' în Laragon sau XAMPP prin intermediul interfaței aplicației.
-      
-    * Apoi, pentru a rula baza de date vom folosii:
+### 3\. Pornirea Aplicației (Build & Run)
 
-    ```bash
-    npm run dev server.js
-    ```
+Execută această comandă pentru a construi imaginile Docker necesare și a porni toate serviciile (backend, frontend, bază de date) în fundal:
+
+```bash
+docker-compose up --build -d
+```
+
+### 4\. Accesarea Aplicației
+
+După ce containerele au pornit cu succes:
+
+| Serviciu | Adresă Implicită |
+| :--- | :--- |
+| **Frontend (Aplicația Web)** | `http://localhost:80` |
+| **Backend (API)** | `http://localhost:3003` |
+| **Database (mysql)** | `http://localhost:3306` |
+
+### 5\. Oprirea și Curățarea
+
+Pentru a opri și șterge containerele fără a pierde datele stocate în volume:
+
+```bash
+docker-compose down
+```
+
+Pentru a șterge complet toate containerele, imaginile și **volumele de date (inclusiv datele MySQL stocate)**:
+
+```bash
+docker-compose down --rmi all -v
+```
+
+-----
 
   ## Rute
   
    | Rutâ pentru | Tip rută | Path |
 | :--- | :--- | :--- |
 | **Reset** | Get | /reset |
-| **User** | Post | /api/user/createUser |
-
-> ⚠️ Notă Importantă: nu uita să-ți pornești mediul de dezvoltare local, fie el XAMPP, Laragon sau alt program similar. Altfel, baza de date nu va putea fi accesată de către backend iar rutele nu vor putea fi apelate
+| **User** | Post | /api/user/create |
+| **Payment** | Post | /api/payment/create |
 
 ## 🌐 Hostarea Web - DevOps
 
@@ -108,7 +128,7 @@ Aplicația **Flow Payment** este găzduită prin intermediul [DigitalOcean](http
 
 * **Server OS:** Ubuntu 22.04.01 (DigitalOcean Droplet)  
 * **Web server:** Nginx – folosit pentru a direcționa cererile către backend și pentru a servi frontend-ul.  
-* **Proces manager:** PM2 – rulează aplicația Node.js în background și gestionează restart-urile automate în caz de erori sau reboot.  
+* **Docker:**  Platforma de Containerizare folosită pentru a rula aplicația în medii izolate și reproductibile (containere).
 
 ### Flux General
 

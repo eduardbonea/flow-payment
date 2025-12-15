@@ -1,0 +1,40 @@
+services:
+  database:
+    image: mysql:8.0
+    container_name: flow_db
+    restart: always
+    ports:
+      - "3306:3306"
+    env_file:
+      - ./backend/.env
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  backend:
+    build:
+      context: .
+      dockerfile: docker/backend/dockerfile
+    container_name: flow_backend
+    restart: always
+    ports:
+      - "3003:3003"
+    env_file:
+      - ./backend/.env
+    environment:
+      DB_HOST: database
+    depends_on:
+      - database
+
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/frontend/dockerfile
+    container_name: flow_frontend
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  mysql_data:
