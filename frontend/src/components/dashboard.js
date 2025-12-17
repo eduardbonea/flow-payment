@@ -1,6 +1,31 @@
-import { html } from '@arrow-js/core'; 
+import { html, reactive } from '@arrow-js/core'; 
 import { appState, navigateTo } from '../app/app.js'; 
+import { toDataURL } from 'qrcode';
 import '../styles/dashboard.css';
+
+const refreshQRCode = async () => {
+    const userId = localStorage.getItem('userId');
+    const image = document.getElementById('qrCodeImage');
+
+    if (!userId) {
+        console.error("User ID not found.");
+        return;
+    }
+
+    try {
+        const paymentURL = `${window.location.origin}/paymentRequest?toUser=${userId}`;
+        const dataURL = await toDataURL(paymentURL, {
+            width: 250,
+            margin: 2
+        });
+        
+        if (image) {
+            image.src = dataURL;
+        }
+    } catch (err) {
+        console.error("Error generating QR:", err);
+    }
+};
 
 const handleLogout = () => {
     localStorage.removeItem('authToken');
@@ -30,11 +55,11 @@ const dashboard = html`
             <button id = "button-recive"@click="${paymentRequest}">Recive</button>
         </div>
         <div class="qr-content">
-            <h2 id = "qr-title">Scan me to recive money</h2> 
-            <div class = "qr">
-                <p>insert qr code</p>
+            <h2 id="qr-title">Scan me to receive money</h2> 
+            <div class="qr">
+                <img id="qrCodeImage" alt="please refresh QR Code" />
             </div>
-            <button id = "qr-button">refresh qr</button>
+            <button id="qr-button" @click="${refreshQRCode}">refresh qr</button>
         </div>
     </div>
     
