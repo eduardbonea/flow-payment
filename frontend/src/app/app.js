@@ -1,4 +1,4 @@
-import { html, reactive } from '@arrow-js/core';
+import { html, reactive} from '@arrow-js/core';
 import '../styles/app.css';
 
 const initialAuthToken = localStorage.getItem('authToken');
@@ -14,6 +14,12 @@ export const navigateTo = (page) => {
     console.log(`Navigating to: ${page}`);
 };
 
+export const setAuthToken = (token) => {
+    appState.authToken = token;
+    appState.isAuthenticated = !!token;
+    localStorage.setItem('authToken', token);
+};
+
 import Login from '../components/login.js'; 
 import Dashboard from '../components/dashboard.js';
 import PaymentSend from '../components/paymentSend.js'
@@ -23,7 +29,7 @@ const root = document.getElementById('app');
 
 const AppContent = html`
     <div class="container">
-        <h1>Flow Payment</h1>
+        <h1 id="general-title">Flow Payment</h1>
         
         <hr>
 
@@ -39,19 +45,19 @@ const AppContent = html`
                     return Dashboard;
                 
                 case 'paymentSend':
-                    return PaymentSend;
+                    return PaymentSend();
                     
                 case 'paymentRequest':
-                    return PaymentRequest;
+                    return PaymentRequest();
                     
                 case 'login':
                 default:
-                    return Dashboard;
+                    return Login;
             }
         }}
 
         <hr>
-        <footer>© 2025 Flow Payment</footer>
+        <footer id ="general-footer">© 2025 Flow Payment</footer>
     </div>
 `;
 

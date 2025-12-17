@@ -1,82 +1,104 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 body {
     height: 100vh;
+    width: 100vw;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #211A1D; 
+    background-color: #211A1D;
+    overflow: hidden;
+    font-family: sans-serif;
 }
 
-.back-button-container{
-    width: 100%;
-    margin-top: 25px;
-    display: flex;
-    justify-content: flex-end; 
-    padding-right: 15px;
-}
-
-#back-button{
-    width: 10%;
-    padding: 16px 14px;
-    background-color: #cad5ca;
-    color: var(--text-color-dark); 
-    border: 1px solid var(--primary-accent); 
-    border-radius: 8px; 
-    box-sizing: border-box;
-}
-
-#title{
-    text-align: center;
-}
-
-.main-content{
-    width: 70vw;
-    min-height: 60vh;
+.main-content {
+    width: 90vw;
+    max-width: 500px;
+    max-height: 90vh; 
     background-color: #6320EE;
-}
-
-#sendForm{
+    border-radius: 20px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
-    align-items: center; 
-    gap: 2vh;
+    overflow-y: auto; 
+}
+
+.back-button-container {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 15px;
+}
+
+#back-button {
+    padding: 10px 15px;
+    background-color: #cad5ca;
+    border-radius: 8px;
+    border: 1px solid #444;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#title {
+    text-align: center;
+    color: white;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+#sendForm {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 1.5vh; 
 }
 
 #sendForm label {
-    display: block;
-    width: 100%;
-    text-align: left;
-}
-
-#sendForm input,
-#sendForm select {
-    display: block;
-    width: 100%; 
-    height: 2.5vh; 
+    color: white;
+    font-size: 0.9rem;
+    margin-bottom: -5px;
 }
 
 input[type="text"],
 input[type="number"],
 input[type="date"],
-select{
+select {
     width: 100%;
-    padding: 16px 14px; 
+    padding: 12px; 
     background-color: #cad5ca;
-    color: var(--text-color-dark); 
-    border: 1px solid var(--primary-accent); 
-    border-radius: 8px; 
-    box-sizing: border-box; 
-    font-size: 18px;
-    transition: border-color 0.3s, box-shadow 0.3s;
+    border: 1px solid #444;
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
 }
 
-#submit-button{
-    width: 50%;
-    padding: 16px 14px;
-    margin-top: 20px;
-    margin-bottom: 35px; 
+#submit-button {
+    width: 60%;
+    align-self: center;
+    padding: 15px;
+    margin-top: 10px;
+    margin-bottom: 10px;
     background-color: #cad5ca;
-    color: var(--text-color-dark); 
-    border: 1px solid var(--primary-accent); 
-    border-radius: 8px; 
-    box-sizing: border-box; 
+    border-radius: 8px;
+    border: 1px solid #444;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#submit-button:hover {
+    background-color: #b3bdb3;
+}
+
+@media (max-height: 550px) {
+    .main-content {
+        padding: 10px;
+    }
+    #title { margin-bottom: 10px; }
+    #sendForm { gap: 5px; }
+    input { padding: 8px; }
 }

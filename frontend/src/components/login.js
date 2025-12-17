@@ -1,7 +1,17 @@
-import { html } from '@arrow-js/core'; 
+import { html, reactive } from '@arrow-js/core'; 
 import '../styles/login.css';
 
-import { appState, navigateTo } from '../app/app.js'; 
+import { appState, navigateTo, setAuthToken } from '../app/app.js'; 
+
+const parseJwt = (token) => {
+    try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        return JSON.parse(window.atob(base64));
+    } catch (e) {
+        return null;
+    }
+};
 
 const handleLogin = async (event) => {
 
@@ -10,8 +20,6 @@ const handleLogin = async (event) => {
     const form = event.target;
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries()); 
-    
-    console.log("Data send:", data);
 
     try {
         const response = await fetch('http://localhost:3001/api/auth/login', {
@@ -30,13 +38,13 @@ const handleLogin = async (event) => {
         }
 
         if (response.ok) {
-            console.log('Login successful!', result);
             appState.authToken = result.token;
             localStorage.setItem('authToken', result.token);
+            localStorage.setItem('userId', result.userId);
             appState.isAuthenticated = true;
             navigateTo('dashboard'); 
         } else {
-            console.error('Auth Error:', result.message || 'Authentication failed');
+            console.error('Auth Error:');
         }
         } catch (error) {
             console.error('Network Error:', error);

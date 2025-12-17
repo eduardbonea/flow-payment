@@ -8,11 +8,12 @@ body {
 #title-login{
   margin: 8px;
   text-align: center;
+  color: #cad5ca;
 }
 
 .container {
   background-color: #6320EE;
-  padding: 40px;
+  padding: 4vw;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }

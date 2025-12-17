@@ -20,13 +20,20 @@ router.post('/login', async (req, res) => {
 			}
 		});
 		if(foundUser) {
+
 			console.log('Found', foundUser);
-            const token = jwt.sign({ username: foundUser.username}, JWTSecret, {expiresIn: '1h'});
-            res.status(200).json({token});
-		} else {
-			console.log('Authentication failed');
-			res.status(401).json('Client error!');
-		};
+		
+			const token = jwt.sign(
+			{ 
+				id: foundUser.id,
+				username: foundUser.username 
+			}, 
+			JWTSecret, 
+			{ expiresIn: '1h' }
+		);
+		
+		res.status(200).json({token});
+}
 	}catch(err) {
 		console.log(err);
 		res.status(500).json('Server error!')
