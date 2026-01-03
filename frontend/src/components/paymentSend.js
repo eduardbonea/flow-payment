@@ -63,7 +63,7 @@ const paymentSend = () => {
                 <option value="RON">RON</option>
                 <option value="EUR">EUR</option>
                 <option value="USD">USD</option>
-                <option value="GDP">GBP</option>
+                <option value="GBP">GBP</option>
             </select>
             <label for="description">description</label>
             <input type="text" id="description" @input="${handleInput}">

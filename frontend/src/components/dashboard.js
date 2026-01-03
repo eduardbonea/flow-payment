@@ -34,10 +34,6 @@ const handleLogout = () => {
     navigateTo('login');
 };
 
-const paymentSend = () => {
-    navigateTo('paymentSend'); 
-};
-
 const paymentRequest = () => {
     navigateTo('paymentRequest'); 
 };
@@ -48,11 +44,7 @@ const dashboard = html`
     
     <div class="dashboard-content">
         <div class="account"> 
-            <h3 id = "account-title">Payment details</h3>
-        </div>
-        <div class="buttons"> 
-            <button id = "button-send" @click="${paymentSend}">Send</button>
-            <button id = "button-recive"@click="${paymentRequest}">Recive</button>
+            <h3 id = "account-title">Payments history</h3>
         </div>
         <div class="qr-content">
             <h2 id="qr-title">Scan me to receive money</h2> 
@@ -63,6 +55,8 @@ const dashboard = html`
         </div>
     </div>
     
+    <button id = "request" @click="${paymentRequest}">+</button>
+
     <button id = "logout" @click="${handleLogout}">Logout</button>
 </div>
 `;

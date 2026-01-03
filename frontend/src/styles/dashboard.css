@@ -40,7 +40,7 @@ body {
 }
 
 .account {
-    grid-area: 1 / 1 / 2 / 2;
+    grid-area: 1 / 1 / 5;
     background-color: #8075FF;
     border-radius: 15px;
     padding: 60px 40px;
@@ -50,20 +50,8 @@ body {
     flex-direction: column;
 }
 
-.buttons {
-    grid-area: 2 / 1 / 3 / 2;
-    background-color: #8075FF;
-    border-radius: 15px;
-    padding: 12px 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    height: 80px;
-}
-
 .qr-content {
-    grid-area: 1 / 2 / 3 / 3;
+    grid-area: 1 / 2 ;
     background-color: #8075FF;
     border-radius: 15px;
     padding: 30px;
@@ -93,7 +81,7 @@ body {
     color: #211A1D;
 }
 
-#button-send, #button-recive, #qr-button, #logout {
+#qr-button, #logout {
     border-radius: 10px;
     padding: 12px 25px;
     background-color: #cad5ca;
@@ -103,8 +91,16 @@ body {
     transition: transform 0.2s;
 }
 
-#button-send{
-    margin-right: 15vw;
+#request {
+    align-self: flex-start;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    margin-top: 8vh;
+    margin-left: 4vw;
+    font-size: 3rem;
+    background-color: #259225;
+    color: #cad5ca;
 }
 
 #logout {
@@ -129,13 +125,8 @@ body {
         padding: 40px 20px;
     }
 
-    .account, .buttons, .qr-content {
+    .account, .qr-content {
         grid-area: auto;
-    }
-
-    .buttons {
-        height: auto;
-        padding: 20px;
     }
 
     .dashboard-pane {

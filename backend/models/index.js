@@ -1,11 +1,28 @@
 const db = require('../config/db');
 const userModel = require('./user');
+const paymentModel = require('./payment');
 const paymentHistoryModel = require('./payments_history');
-const paymentModel = require('./payments');
+const payerModel = require('./payer'); 
 
-userModel.belongsToMany(paymentModel, 
-    {through: paymentHistoryModel})
-paymentModel.belongsToMany(userModel, 
-    {through: paymentHistoryModel})
+userModel.hasMany(paymentModel, 
+    { foreignKey: 'idRequester', 
+        as: 'CreatedRequests' });
+paymentModel.belongsTo(userModel, 
+    { foreignKey: 'idRequester', 
+        as: 'Requester' });
 
-module.exports = {db, userModel, paymentHistoryModel, paymentModel};
+paymentModel.belongsToMany(payerModel, { 
+    through: paymentHistoryModel, 
+    foreignKey: 'idPay', 
+    otherKey: 'idPayer' 
+});
+payerModel.belongsToMany(paymentModel, { 
+    through: paymentHistoryModel, 
+    foreignKey: 'idPayer', 
+    otherKey: 'idPay' 
+});
+
+paymentHistoryModel.belongsTo(paymentModel, { foreignKey: 'idPay' });
+paymentHistoryModel.belongsTo(payerModel, { foreignKey: 'idPayer' });
+
+module.exports = { db, userModel, paymentModel, paymentHistoryModel, payerModel };

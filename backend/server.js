@@ -10,7 +10,7 @@ const authMiddleware = require('./middleware/auth');
 
 const port = process.env.PORT || 3000;
 
-app.use(cors({ origin: 'http://localhost:80' }));
+app.use(cors({ origin: 'http://localhost:5173' }));
 app.use(express.json());
 
 app.get('/api/dashboard', authMiddleware, (req, res) => {

@@ -14,23 +14,23 @@ const paymentModel = db.define (
             foreignKey: true,
             allowNull: false
         },
-        idPayeer:{
-            type: DataTypes.INTEGER,
+        UUID:{
+            type: DataTypes.UUID,
             foreignKey: true,
             allowNull: false
         },
         amount:{
-            type: DataTypes.DECIMAL,
+            type: DataTypes.DECIMAL(7, 2),
             allowNull: false,
             defaultValue: 0
         },
-        currency:{
-            type: DataTypes.ENUM('RON', 'EUR', 'USD', 'GBP'),
+        peopleNo:{
+            type: DataTypes.INTEGER,
             allowNull: false,
-            defaultValue: 'RON'
+            defaultValue: 1
         },
         description:{
-            type: DataTypes.TEXT,
+            type: DataTypes.STRING,
             allowNull: true
         },
         expireDate:{

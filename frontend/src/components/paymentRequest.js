@@ -3,9 +3,8 @@ import '../styles/paymentRequest.css';
 import { appState, navigateTo } from '../app/app';
 
 const state = reactive({ 
-    username: '',
+    peopleNo: 1, 
     amount: '',
-    currency: '',
     description: '',
     expireDate: '',
 });
@@ -18,7 +17,7 @@ const handleInput = (e) => {
     state[e.target.id] = e.target.value;
 };
 
-async function handleSubmit(event){
+async function handleSubmit(event) {
     event.preventDefault(); 
     
     const token = appState.authToken;
@@ -29,18 +28,17 @@ async function handleSubmit(event){
     }
 
     const sendForm = {
-        username: state.username,
         amount: state.amount,
-        currency: state.currency,
         description: state.description,
         expireDate: state.expireDate,
+        peopleNo: state.peopleNo,
     };
 
     try {
-        const response = await fetch ('http://localhost:3001/api/payment/create', {
+        const response = await fetch('http://localhost:3001/api/payment/create', {
             method: 'POST',
             headers: {
-                'Content-Type':'application/json',
+                'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`,
             },
             body: JSON.stringify(sendForm),
@@ -49,42 +47,51 @@ async function handleSubmit(event){
         const result = await response.json();
         
         if (response.ok) {
+            const shareableLink = `${window.location.origin}/pay/${result.uuid}`;
+            
+            await navigator.clipboard.writeText(shareableLink);
+            
+            alert(`Success! Link copied to clipboard:\n${shareableLink}`);
+            
             navigateTo('dashboard');
         } else {
-            console.error('Eroare Server:', result.message);
+            alert(`Server Error: ${result.message || 'Could not create request'}`);
         }
 
-    }catch(err) {
-        console.error(err);
+    } catch(err) {
+        console.error('Connection error:', err);
+        alert('Failed to connect to the server.');
     };
 };
 
 const paymentRequest = () => {
     return html`
     <div class="main-content">
-    <div class="back-button-container">
-        <button id="back-button" @click="${handleBack}">Back to dashboard</button>
-    </div>
-     <h2 id="title">Send money to friends</h2>
+        <div class="back-button-container">
+            <button id="back-button" @click="${handleBack}">Back to dashboard</button>
+        </div>
+        
+        <h2 id="title">Request money from your friends</h2>
+        
         <form id="sendForm" @submit="${handleSubmit}">
-            <label for="username">username</label>
-            <input type="text" id="username" @input="${handleInput}">
-            <label for="amount">amount</label>
-            <input type="number" id="amount" @input="${handleInput}">
-            <label for="currency">currency</label>
-            <select id="currency" name="currency" @input="${handleInput}">
-                <option value="RON">RON</option>
-                <option value="EUR">EUR</option>
-                <option value="USD">USD</option>
-                <option value="GDP">GBP</option>
-            </select>
-            <label for="description">description</label>
+
+            <label for="peopleNo">Number of People</label>
+            <input type="number" id="peopleNo" @input="${handleInput}" min="1">
+
+            <label for="amount">Total Amount</label>
+            <input type="number" id="amount"  @input="${handleInput}" required>
+
+            <label for="description">Description</label>
             <input type="text" id="description" @input="${handleInput}">
-            <label for="expireDate">expire date</label>
-            <input type="date" id="expireDate" @input="${handleInput}">
-            <button type="submit" id="submit-button">Send money</button>
+
+            <label for="expireDate">Expire Date</label>
+            <input type="date" id="expireDate" @input="${handleInput}" required>
+
+            <button type="submit" id="submit-button">Create & Copy Link</button>
+
         </form>
     </div>
 `;
 };
+
 export default paymentRequest;

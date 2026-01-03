@@ -1,8 +1,8 @@
 const db = require('../config/db');
 const { DataTypes } = require('sequelize');
 
-const paymentHistoryModel = db.define(
-    "payments_history",
+const payerModel = db.define(
+    "payer",
     {
         id: {
             type: DataTypes.INTEGER,
@@ -13,19 +13,17 @@ const paymentHistoryModel = db.define(
             type: DataTypes.INTEGER,
             allowNull: false
         },
-        idPayer: {
-            type: DataTypes.INTEGER,
+        username: {
+            type: DataTypes.STRING,
             allowNull: false
         },
-        status: {
-            type: DataTypes.ENUM('in_progress', 'finished', 'canceled'),
-            allowNull: false,
-            defaultValue: 'in_progress'
+        phoneNo: {
+            type: DataTypes.STRING,
+            allowNull: false
         },
-        createdAt: {
-            type: DataTypes.DATE,
-            allowNull: false,
-            defaultValue: DataTypes.NOW
+        email: {
+            type: DataTypes.STRING,
+            allowNull: false
         }
     },
     { 
@@ -34,4 +32,4 @@ const paymentHistoryModel = db.define(
     }
 );
 
-module.exports = paymentHistoryModel;
+module.exports = payerModel;

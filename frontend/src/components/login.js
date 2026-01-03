@@ -43,6 +43,7 @@ const handleLogin = async (event) => {
             localStorage.setItem('userId', result.userId);
             appState.isAuthenticated = true;
             navigateTo('dashboard'); 
+            console.log(result.token);
         } else {
             console.error('Auth Error:');
         }
