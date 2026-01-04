@@ -1,7 +1,7 @@
 import { html, reactive } from '@arrow-js/core'; 
 import '../styles/login.css';
 
-import { appState, navigateTo, setAuthToken } from '../app/app.js'; 
+import { appState, navigateTo, setAuthToken, API_BASE_URL } from '../app/app.js'; 
 
 const parseJwt = (token) => {
     try {
@@ -22,7 +22,7 @@ const handleLogin = async (event) => {
     const data = Object.fromEntries(formData.entries()); 
 
     try {
-        const response = await fetch('http://localhost:3001/api/auth/login', {
+        const response = await fetch(`${API_BASE_URL}/auth/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -63,8 +63,17 @@ const Login = html`
         <label for="password">Password:</label><br>
         <input type="password" id="password" name="password" required><br><br>
 
-        <button type="submit" id="login-button">Login</button>
+        <div class="button-group">
+            <button type="submit" id="login-button">Login</button>
+            <button 
+                type="button" 
+                id="signup-button" 
+                @click="${() => navigateTo('signup')}"
+            >
+                Create Account
+            </button>
     </form>
+
 </div>
 `;
 

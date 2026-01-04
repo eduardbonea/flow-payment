@@ -1,77 +1,177 @@
-import { html, reactive } from '@arrow-js/core'; 
-import '../styles/paymentSend.css';
-import {navigateTo} from '../app/app';
+import { html, reactive } from "@arrow-js/core";
+import "../styles/paymentSend.css";
+import { navigateTo, API_BASE_URL } from "../app/app";
 
-const handleBack = () => {
-    navigateTo('dashboard'); 
-};
+const state = reactive({
+  requester: "",
+  username: "",
+  email: "",
+  phone: "",
+  amount: "",
+  description: "",
+  isLoaded: false,
+  error: null,
+  currentUuid: null,
+  isSubmitting: false,
+});
 
-const state = {
-    username: '',
-    amount: '',
-    currency: '',
-    description: '',
-    expireDate: '',
-};
+async function fetchDetails(uuid) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/payment/getDetails/${uuid}`);
 
-const handleInput = (e) => {
-    state[e.target.id] = e.target.value;
-};
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData || "Payment request not found or expired");
+    }
 
-async function handleSubmit(event){
-    event.preventDefault(); 
-    
-    const sendForm = {
-        username: state.username,
-        amount: state.amount,
-        currency: state.currency,
-        description: state.description,
-        expireDate: state.expireDate,
-    };
+    const data = await response.json();
+    state.amount = data.amount;
+    state.description = data.description;
+    state.requester = data.requester;
+    state.isLoaded = true;
+  } catch (err) {
+    state.error = err.message;
+    state.isLoaded = true;
+    console.error("Fetch error:", err);
+  }
+}
 
-    try {
-        const response = await fetch ('http://localhost:3001/api/payment/update', {
-            method: 'POST',
-            headers: {
-                'Content-Type':'application/json',
-            },
-            body: JSON.stringify(sendForm),
-        });
-        
-        const result = await response.json();
-        console.log(result);
+async function handleSubmit(event, uuid) {
+  event.preventDefault();
 
-    }catch(err) {
-        console.error(err.message);
-    };
-};
+  if (state.isSubmitting) return;
+  state.isSubmitting = true;
 
-const paymentSend = () => {
-    return html`
+  const sendForm = {
+    uuid: uuid,
+    username: state.username,
+    email: state.email,
+    phone: state.phone,
+  };
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/payment/patch`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(sendForm),
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      alert("Payment recorded successfully!");
+      navigateTo("login");
+    } else {
+      alert("Error: " + (result.message || result));
+    }
+  } catch (err) {
+    console.error("Payment submit error:", err);
+    alert("Server connection failed. Please try again later.");
+  } finally {
+    state.isSubmitting = false;
+  }
+}
+
+const paymentSend = (uuid) => {
+
+  if (uuid && uuid !== state.currentUuid) {
+    state.isLoaded = false;
+    state.error = null;
+    state.currentUuid = uuid;
+    fetchDetails(uuid);
+  }
+
+
+  return html`
     <div class="main-content">
-    <div class="back-button-container">
-        <button id="back-button" @click="${handleBack}">Back to dashboard</button>
+      ${() => {
+
+        if (state.error) {
+          return html` <div class="error-container">
+            <div class="error-icon">⚠️</div>
+            <p class="error-msg">${state.error}</p>
+            <button
+              class="retry-btn"
+              @click="${() => window.location.reload()}"
+            >
+              Try Again
+            </button>
+          </div>`;
+        }
+
+        if (!state.isLoaded) {
+          return html` <div class="loading-container">
+            <div class="spinner"></div>
+            <p>Fetching payment details...</p>
+          </div>`;
+        }
+
+        return html`
+          <div class="payment-card">
+            <header class="card-header">
+              <h2>Send money to ${state.requester}</h2>
+              <p class="description">description: ${state.description}</p>
+            </header>
+
+            <div class="amount-section">
+              <span class="label">Total Amount</span>
+              <span class="amount">${state.amount} EUR</span>
+            </div>
+
+            <form id="sendForm" @submit="${(e) => handleSubmit(e, uuid)}">
+              <div class="input-group">
+                <label for="name">Your Full Name</label>
+                <input
+                  type="text"
+                  id="name"
+                  placeholder="John Doe"
+                  @input="${(e) => {
+                    state.username = e.target.value;
+                  }}"
+                  required
+                />
+              </div>
+
+              <div class="input-group">
+                <label for="email">Email Address</label>
+                <input
+                  type="email"
+                  id="email"
+                  placeholder="john@example.com"
+                  @input="${(e) => {
+                    state.email = e.target.value;
+                  }}"
+                  required
+                />
+              </div>
+
+              <div class="input-group">
+                <label for="phone">Phone Number</label>
+                <input
+                  type="tel"
+                  id="phone"
+                  placeholder="+40 7xx xxx xxx"
+                  @input="${(e) => {
+                    state.phone = e.target.value;
+                  }}"
+                  required
+                />
+              </div>
+
+              <button
+                type="submit"
+                id="submit-button"
+                ?disabled="${state.isSubmitting}"
+              >
+                ${() =>
+                  state.isSubmitting ? "Processing..." : "Complete Payment"}
+              </button>
+            </form>
+          </div>
+        `;
+      }}
     </div>
-     <h2 id="title">Send money to friends</h2>
-        <form id="sendForm" @submit="${handleSubmit}">
-            <label for="username">username</label>
-            <input type="text" id="username" @input="${handleInput}">
-            <label for="amount">amount</label>
-            <input type="number" id="amount" @input="${handleInput}">
-            <label for="currency">currency</label>
-            <select id="currency" name="currency" @input="${handleInput}">
-                <option value="RON">RON</option>
-                <option value="EUR">EUR</option>
-                <option value="USD">USD</option>
-                <option value="GBP">GBP</option>
-            </select>
-            <label for="description">description</label>
-            <input type="text" id="description" @input="${handleInput}">
-            <label for="expireDate">expire date</label>
-            <input type="date" id="expireDate" @input="${handleInput}">
-            <button type="submit" id="submit-button">Send money</button>
-        </form>
-    </div>
-`;
+  `;
 };
+
 export default paymentSend;

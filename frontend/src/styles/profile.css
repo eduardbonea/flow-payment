@@ -1,0 +1,116 @@
+.profile-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+#back-button {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: #8075FF;
+    border: none;
+    color: #cad5ca;
+    font-size: 1.2rem;
+    padding: 8px 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+#back-button:hover {
+    opacity: 0.8;
+}
+
+.profile-content {
+    background-color: #8075FF;
+    border-radius: 15px;
+    padding: 30px;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 600px;
+    box-sizing: border-box;
+}
+
+.profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.field-group label {
+    color: #cad5ca;
+    font-weight: bold;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.input-row {
+    display: flex;
+    gap: 10px;
+    align-items: stretch;
+}
+
+.input-row input {
+    flex: 1;
+    background-color: #211A1D;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    padding: 12px;
+    color: #cad5ca;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.input-row input[readonly] {
+    background-color: rgba(33, 26, 29, 0.5);
+    color: #a0a0a0;
+    cursor: not-allowed;
+}
+
+.input-row input:focus:not([readonly]) {
+    border-color: #211A1D;
+}
+
+.save-btn {
+    background-color: #211A1D;
+    color: #4CAF50;
+    border: 1px solid #4CAF50;
+    border-radius: 10px;
+    padding: 0 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.save-btn:hover {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#edit-toggle {
+    background-color: #cad5ca;
+    color: #211A1D;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+#edit-toggle:hover {
+    transform: scale(1.05);
+    background-color: #ffffff;
+}

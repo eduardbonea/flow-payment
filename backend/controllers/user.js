@@ -8,6 +8,8 @@ const controller = {
                 username: req.body.username,
                 password: req.body.password,
                 email: req.body.email,
+                iban: req.body.iban,
+                revolutLink: req.body.revolutLink
             };
             const createdUser = await userDb.create(newUser);
             res.status(200).json('User created');
@@ -17,17 +19,17 @@ const controller = {
         };
     },
 
-    getById: async (req, res) => {
-        try{
-            const idData = {
-                id: req.params.id,
-            };
-            const fetchUser = await require('../models/user');
-            res.status(200).json('User found');
-        }catch(err){
-            console.log(err);
-            res.status(500).json('Server error!');
-        };
+    getProfile: async (req, res) => {
+        try {
+            const userId = req.user.id;
+            const foundUser = await userDb.findOne({
+                where: { id: userId },
+                attributes: ["username", "email", "iban", "revolutLink"]
+            });
+            res.status(200).json(foundUser);
+        } catch (err) {
+            res.status(500).json('Error fetching profile');
+        }
     },
 
     updateUsername: async (req, res) => {

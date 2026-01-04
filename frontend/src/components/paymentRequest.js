@@ -1,6 +1,6 @@
-import { html, reactive } from '@arrow-js/core'; 
+import {html, reactive} from '@arrow-js/core'; 
 import '../styles/paymentRequest.css';
-import { appState, navigateTo } from '../app/app';
+import {appState, navigateTo, API_BASE_URL} from '../app/app';
 
 const state = reactive({ 
     peopleNo: 1, 
@@ -35,7 +35,7 @@ async function handleSubmit(event) {
     };
 
     try {
-        const response = await fetch('http://localhost:3001/api/payment/create', {
+        const response = await fetch(`${API_BASE_URL}/payment/create`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

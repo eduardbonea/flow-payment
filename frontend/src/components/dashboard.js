@@ -34,17 +34,24 @@ const handleLogout = () => {
     navigateTo('login');
 };
 
+const handleProfile = () => {
+    navigateTo('profile'); 
+};
+
 const paymentRequest = () => {
     navigateTo('paymentRequest'); 
 };
 
 const dashboard = html`
 <div class="dashboard-pane">
-    <h2 id = "title">Dashboard</h2>
+    <div class="top-bar">
+        <button id="profile" @click="${handleProfile}">👤 Profile</button>
+        <h2 id="title">Dashboard</h2>
+        <div class="spacer"></div> </div>
     
     <div class="dashboard-content">
         <div class="account"> 
-            <h3 id = "account-title">Payments history</h3>
+            <h3 id="account-title">Payments history</h3>
         </div>
         <div class="qr-content">
             <h2 id="qr-title">Scan me to receive money</h2> 
@@ -55,9 +62,10 @@ const dashboard = html`
         </div>
     </div>
     
-    <button id = "request" @click="${paymentRequest}">+</button>
-
-    <button id = "logout" @click="${handleLogout}">Logout</button>
+    <div class="bottom-bar">
+        <button id="request" @click="${paymentRequest}">+</button>
+        <button id="logout" @click="${handleLogout}">Logout</button>
+    </div>
 </div>
 `;
 

@@ -112,13 +112,38 @@ docker-compose down --rmi all -v
 
 -----
 
-  ## Rute
-  
-   | Rutâ pentru | Tip rută | Path |
+## Rute API
+
+### Rută Generală
+
+| Funcționalitate | Tip rută | Path |
 | :--- | :--- | :--- |
-| **Reset** | Get | /reset |
-| **User** | Post | /api/user/create |
-| **Payment** | Post | /api/payment/create |
+| **Resetare baza de date** | GET | /reset |
+
+---
+
+### Rute User
+
+| Funcționalitate | Tip rută | Path |
+| :--- | :--- | :--- |
+| **Creare utilizator** | POST | /api/user/create |
+| **Găsire profil utilizator** | GET | /api/user/getProfile |
+| **Actualizare username** | PATCH | /api/user/patchusername/{userId} |
+| **Actualizare parolă** | PATCH | /api/user/patchpassword/{userId} |
+| **Actualizare email** | PATCH | /api/user/patchemail/{userId} |
+| **Ștergere utilizator** | DELETE | /api/user/delete/{userId} |
+
+---
+
+### Rute Payment
+
+| Funcționalitate | Tip rută | Path |
+| :--- | :--- | :--- |
+| **Creare plată** | POST | /api/payment/create |
+| **Istoric plăți** | GET | /api/payment/getHistory |
+| **Detalii plată** | GET | /api/payment/getDetails/{UUID} |
+| **Actualizare plată** | GET | /api/payment/patch |
+
 
 ## 🌐 Hostarea Web - DevOps
 

@@ -1,9 +1,10 @@
 const express = require('express');
 const userRouter = express.Router();
-const {userController} = require('../controllers');
+const { userController } = require('../controllers');
+const { authenticateToken } = require('./auth');
 
 userRouter.post('/create', userController.create);
-userRouter.get('/getid/:id', userController.getById);
+userRouter.get('/getProfile', authenticateToken, userController.getProfile);
 userRouter.patch('/patchusername/:id', userController.updateUsername);
 userRouter.patch('/patchpassword/:id', userController.updatePassword);
 userRouter.patch('/patchemail/:id', userController.updateEmail);

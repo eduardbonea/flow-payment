@@ -22,7 +22,8 @@ payerModel.belongsToMany(paymentModel, {
     otherKey: 'idPay' 
 });
 
-paymentHistoryModel.belongsTo(paymentModel, { foreignKey: 'idPay' });
-paymentHistoryModel.belongsTo(payerModel, { foreignKey: 'idPayer' });
+paymentHistoryModel.belongsTo(paymentModel, { foreignKey: 'idPay', as: 'Payment' });
+paymentHistoryModel.belongsTo(payerModel, { foreignKey: 'idPayer', as: 'GuestPayer' });
+
 
 module.exports = { db, userModel, paymentModel, paymentHistoryModel, payerModel };

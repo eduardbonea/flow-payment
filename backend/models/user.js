@@ -1,3 +1,4 @@
+const { toDefaultValue } = require('sequelize/lib/utils');
 const db = require('../config/db');
 const {DataTypes} = require('sequelize');
 
@@ -21,7 +22,22 @@ const userModel = db.define(
         email: {
             type: DataTypes.STRING,
             allowNull: false
-        }
+        },
+        iban: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            validate: {
+                len: [15, 34],
+                is: /^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$/i,
+            }
+        },
+        revolutLink: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            validate: {
+                isUrl: true,
+            }
+        },
     },
     {
         freezeTableName: true
