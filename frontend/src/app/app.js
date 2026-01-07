@@ -10,13 +10,31 @@ import Profile from '../components/profile.js';
 
 export const API_BASE_URL = 'http://localhost:3001/api';
 
+const root = document.getElementById('app');
 const initialAuthToken = localStorage.getItem('authToken');
+const currentPath = window.location.pathname;
+
+let startPage = initialAuthToken ? 'dashboard' : 'login';
+let startUuid = null;
+
+if (currentPath.startsWith('/pay/')) {
+    const parts = currentPath.split('/');
+    startUuid = parts[2] || parts[1];
+    startPage = 'paymentSend';
+} else if (currentPath === '/signup') {
+    startPage = 'signup';
+} else if (initialAuthToken) {
+    const pageName = currentPath.replace('/', '');
+    if (pageName && pageName !== 'login') {
+        startPage = pageName;
+    }
+}
 
 export const appState = reactive({
     isAuthenticated: !!initialAuthToken,
-    currentPage: initialAuthToken ? 'dashboard' : 'login',
+    currentPage: startPage,
     authToken: initialAuthToken,
-    paymentId: null 
+    paymentId: startUuid
 });
 
 export const navigateTo = (path) => {
@@ -48,17 +66,14 @@ export const logout = () => {
     navigateTo('login');
 };
 
-const root = document.getElementById('app');
-
 const AppContent = html`
     <div class="container">
-        <h1 id="general-title" @click="${() => navigateTo('dashboard')}" style="cursor: pointer;">
+        <h1 id="general-title" @click="${() => { if(appState.isAuthenticated) navigateTo('dashboard'); }}" style="cursor: pointer;">
             Flow Payment
         </h1>
         <hr>
 
         ${() => {
-            // PUBLIC ROUTES
             if (appState.currentPage === 'signup') {
                 return SignUp;
             }
@@ -67,12 +82,10 @@ const AppContent = html`
                 return PaymentSend(appState.paymentId);
             }
 
-            // AUTH GUARD
             if (!appState.isAuthenticated) {
                 return Login;
             }
             
-            // PROTECTED ROUTES
             switch (appState.currentPage) {
                 case 'dashboard':
                     return Dashboard;
@@ -90,35 +103,19 @@ const AppContent = html`
     </div>
 `;
 
-window.addEventListener('load', () => {
-    const path = window.location.pathname;
-    
-    if (path.startsWith('/pay/')) {
-        const uuid = path.split('/')[2];
-        if (uuid) {
-            appState.paymentId = uuid;
-            appState.currentPage = 'paymentSend';
-        }
-    } else if (path === '/signup') {
-        appState.currentPage = 'signup';
-    } else if (appState.isAuthenticated) {
-        const page = path.replace('/', '');
-        appState.currentPage = page || 'dashboard';
-    } else {
-        appState.currentPage = 'login';
-    }
-});
-
 window.addEventListener('popstate', () => {
     const path = window.location.pathname;
     if (path.startsWith('/pay/')) {
         const uuid = path.split('/')[2];
         appState.paymentId = uuid;
         appState.currentPage = 'paymentSend';
+    } else if (path === '/signup') {
+        appState.currentPage = 'signup';
     } else {
         const page = path.replace('/', '') || (appState.isAuthenticated ? 'dashboard' : 'login');
         appState.currentPage = page;
     }
 });
 
+root.innerHTML = '';
 AppContent(root);

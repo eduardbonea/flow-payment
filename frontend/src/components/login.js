@@ -19,11 +19,10 @@ const handleLogin = async (event) => {
 
         if (response.ok) {
             localStorage.setItem('authToken', result.token);
-            
-            // DECODARE JWT PENTRU ID
+            console.log(result.token)
             try {
                 const payload = JSON.parse(atob(result.token.split('.')[1]));
-                const userId = payload.id || payload.sub; // Căutăm 'id' în token
+                const userId = payload.id || payload.sub;
                 localStorage.setItem('userId', userId);
                 console.log("ID extras cu succes:", userId);
             } catch (e) {
@@ -33,7 +32,7 @@ const handleLogin = async (event) => {
             appState.isAuthenticated = true;
             navigateTo('dashboard'); 
         } else {
-            alert('Login failed: ' + (result.message || 'Unknown error'));
+            alert('Login failed: ' + (result.message || 'Check your credentials'));
         }
     } catch (error) {
         console.error('Network Error:', error);

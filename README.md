@@ -167,5 +167,5 @@ Aplicația **Flow Payment** este găzduită prin intermediul [DigitalOcean](http
 * **Eduard Bonea** - [GitHub](https://github.com/eduardbonea)
                    - [Website](https://eduardbonea.com)
 
-* **Ana-Maria Antonenco** - [GitHub](https://github.com/anaantonenco)
+* **Ana-Maria Antonenco** - [GitHub](https://github.com/anamariaantonenco)
                           - [Instagram](https://instagram.com/anamariaantonenco)

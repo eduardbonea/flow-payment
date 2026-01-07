@@ -1,77 +1,108 @@
+body {
+    background-color: #211A1D !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+}
 
-#payment-wrapper * {
+header, #general-title {
+    text-align: center;
+    width: 100%;
+}
+
+footer, #general-footer {
+    text-align: center;
+    width: 100%;
+    font-size: 1.2rem !important;
+    padding: 20px;
+    color: rgba(255,255,255,0.5);
+}
+
+.payment-send-wrapper {
+    width: 100%;
+    height: 100%; 
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    padding: 20px;
+    font-family: 'Inter', sans-serif;
+    color: #cad5ca;
+    box-sizing: border-box;
+    overflow: hidden; 
+}
+
+.payment-send-wrapper * {
     box-sizing: border-box;
 }
 
-body {
-    background-color: #211A1D;
-    min-height: 80vh;
+.payment-send-wrapper .payment-card {
+    width: 100%;
+    max-width: 1000px;
+    background-color: #6320EE;
+    border-radius: 30px;
     display: flex;
-    justify-content: center;
-    align-items: flex-start; 
-    padding: 15px;
-    font-family: 'Inter', sans-serif;
-    color: #cad5ca;
+    flex-direction: column;
+    max-height: 90vh; 
+    overflow-y: auto;
+    padding: 40px;
+    box-shadow: none;
 }
 
-#general-title{
-    padding-bottom: 1vh;
-}
-
-#general-footer{
-    font-size: 1.5rem;
-    padding-top: 1vh;
-}
-
-.payment-header {
+.payment-send-wrapper .payment-header {
     text-align: center;
-    margin-bottom: 30px;
-    border-bottom: 3px solid rgba(202, 213, 202, 0.1);
-    padding-bottom: 1vh;
+    margin-bottom: 25px;
+    border-bottom: 3px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 20px;
+    flex-shrink: 0;
 }
 
-.payment-header h2 {
-    padding-top: 1vh;
-    font-size: 2.5rem;
+.payment-send-wrapper .payment-header h2 {
+    font-size: 2.2rem;
     font-weight: 900;
     margin-bottom: 10px;
-    color: #cad5ca;
+    color: white;
 }
 
-.payment-header p {
-    font-size: 1.8rem;
+.payment-send-wrapper .payment-header p {
+    font-size: 1.4rem;
     font-weight: 700;
-    color: #dbece5;
+    color: rgba(255, 255, 255, 0.85);
     line-height: 1.3;
 }
 
-.payment-split-content {
+.payment-send-wrapper .payment-split-content {
     display: flex;
     flex-direction: column;
     gap: 30px;
     width: 100%;
 }
 
-
-.amount-box {
+.payment-send-wrapper .amount-box {
     background-color: #8075FF;
     padding: 30px;
     border-radius: 20px;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 180px;
 }
 
-.amount-box .label {
+.payment-send-wrapper .amount-box .label {
     display: block;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 2px;
     margin-bottom: 10px;
-    color: #cad5ca;
+    color: white;
     opacity: 0.9;
 }
 
-.amount-box .value {
+.payment-send-wrapper .amount-box .value {
     display: block;
     font-size: 4rem;
     font-weight: 900;
@@ -79,155 +110,233 @@ body {
     line-height: 1;
 }
 
-#sendForm {
+.payment-send-wrapper #sendForm {
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 20px;
 }
 
-.field {
+.payment-send-wrapper .field {
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 8px;
 }
 
-.field label {
-    font-size: 1.5rem;
+.payment-send-wrapper .field label {
+    font-size: 1.1rem;
     font-weight: 900;
     margin-left: 10px;
-    color: #cad5ca;
+    color: white;
 }
 
-#payment-wrapper .field input {
-    display: block !important;
-    width: 100% !important;
-    height: auto !important;
-    padding: 30px !important; 
+.payment-send-wrapper .field input {
+    display: block;
+    width: 100%;
+    padding: 22px; 
     background-color: #cad5ca;
     color: #211A1D;
-    border: none;
-    border-radius: 20px;
-    font-size: 1.8rem;
+    border: 2px solid transparent;
+    border-radius: 18px;
+    font-size: 1.3rem;
     font-weight: 900;
     outline: none;
     box-shadow: none;
     margin: 0;
-    appearance: none;
+    transition: all 0.2s;
 }
 
-#payment-wrapper .field input::placeholder {
-    color: #211A1D;
-    opacity: 0.5;
-}
-
-#payment-wrapper .field input:focus {
+.payment-send-wrapper .field input:focus {
     background-color: #fff;
-    outline: 5px solid #8075FF;
+    outline: 4px solid #8075FF;
 }
 
-#pay-btn {
+.payment-send-wrapper .field input.error {
+    border-color: #ff4d4d;
+    background-color: #ffd6d6;
+}
+
+.payment-send-wrapper .error-msg {
+    color: #ff4d4d;
+    font-size: 0.9rem;
+    font-weight: 800;
+    margin-left: 10px;
+    background-color: rgba(0,0,0,0.2);
+    padding: 5px 10px;
+    border-radius: 8px;
+    width: fit-content;
+}
+
+.payment-send-wrapper #pay-btn {
     width: 100%;
     display: block;
     margin-top: 15px;
-    padding: 1vh;
-    margin-bottom: 2vh;   
+    padding: 25px; 
     background-color: #259225;
     color: #cad5ca;
     border: none;
     border-radius: 20px;
-    font-size: 2.2rem;
+    font-size: 1.6rem;
     font-weight: 900;
     text-transform: uppercase;
     letter-spacing: 1px;
     cursor: pointer;
 }
 
-#pay-btn:active {
+.payment-send-wrapper #pay-btn:active {
     transform: scale(0.98);
 }
 
-#pay-btn:disabled {
-    background-color: #555;
-    opacity: 0.7;
-}
-
-.status-msg {
+.payment-send-wrapper .status-msg {
     text-align: center;
     font-size: 1.5rem;
     padding: 40px;
     font-weight: bold;
+    color: white;
+}
+
+.payment-send-wrapper .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    padding: 20px;
+}
+
+.payment-send-wrapper .modal-content {
+    background-color: #6320EE;
+    width: 100%;
+    max-width: 550px;
+    border-radius: 30px;
+    padding: 40px;
+    text-align: center;
+    box-shadow: 0 10px 50px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.payment-send-wrapper .modal-content h3 {
+    font-size: 2rem;
+    font-weight: 900;
+    color: white;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+}
+
+.payment-send-wrapper .modal-content p {
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.8);
+    margin-bottom: 10px;
+}
+
+.payment-send-wrapper .modal-options {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+.payment-send-wrapper .option-box {
+    background-color: rgba(0,0,0,0.2);
+    padding: 20px;
+    border-radius: 20px;
+    text-align: left;
+}
+
+.payment-send-wrapper .option-label {
+    display: block;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 10px;
+}
+
+.payment-send-wrapper .iban-display {
+    display: flex;
+    gap: 10px;
+}
+
+.payment-send-wrapper .iban-display input {
+    flex: 1;
+    background: rgba(255,255,255,0.1);
+    border: none;
+    padding: 15px;
+    border-radius: 10px;
+    color: white;
+    font-family: monospace;
+    font-size: 1.1rem;
+    outline: none;
+}
+
+.payment-send-wrapper .copy-btn {
+    background-color: #8075FF;
+    color: white;
+    border: none;
+    padding: 0 20px;
+    border-radius: 10px;
+    font-weight: 800;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+}
+
+.payment-send-wrapper .copy-btn.success {
+    background-color: #259225;
+    transform: scale(1.05);
+}
+
+.payment-send-wrapper .revolut-btn {
+    width: 100%;
+    background-color: white;
+    color: #0075EB;
+    border: none;
+    padding: 18px;
+    border-radius: 15px;
+    font-size: 1.2rem;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+.payment-send-wrapper .close-modal-btn {
+    background: transparent;
+    border: 2px solid rgba(255,255,255,0.3);
+    color: white;
+    padding: 15px;
+    border-radius: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    margin-top: 10px;
+    text-transform: uppercase;
 }
 
 @media (min-width: 1000px) {
-    body {
-        padding: 0;
-    }
-
-    .payment-header h2 {
-        font-size: 3.5rem;
-    }
-    
-    .payment-header p {
-        font-size: 2.2rem;
-    }
-
-    .payment-split-content {
+    .payment-send-wrapper .payment-split-content {
         flex-direction: row;
         align-items: stretch;
-        padding-bottom: 2vh;
-        gap: 60px;
-    }
-
-    .amount-box {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        padding: 40px;
-    }
-    
-    .amount-box .value {
-        font-size: 5.5rem;
-    }
-
-    #sendForm {
-        flex: 1.5;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
         gap: 40px;
     }
-
-    .field.full {
+    
+    .payment-send-wrapper #sendForm {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        flex: 1.5;
+    }
+    
+    .payment-send-wrapper .field.full {
         grid-column: span 2;
     }
-
-    #pay-btn {
+    
+    .payment-send-wrapper #pay-btn {
         grid-column: span 2;
-        font-size: 2.4rem;
-        padding: 35px;
     }
-
-    .container{
-        margin: 10vh;
-    }
-
-
-    #payment-wrapper .field input {
-    display: block !important;
-    width: 100% !important;
-    height: auto !important;
-    padding: 30px !important; 
-    background-color: #cad5ca;
-    color: #211A1D;
-    border: none;
-    border-radius: 20px;
-    font-size: 1.8rem;
-    font-weight: 900;
-    outline: none;
-    box-shadow: none;
-    margin: 0;
-    appearance: none;
-}
 }

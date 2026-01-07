@@ -47,7 +47,7 @@ const controller = {
           {
             model: userDb,
             as: "Requester",
-            attributes: ["username"],
+            attributes: ["username", "iban", "revolutLink"],
           },
         ],
       });
@@ -57,7 +57,10 @@ const controller = {
       res.status(200).json({
         amount: payment.amount,
         description: payment.description,
-        requester: payment.Requester ? payment.Requester.username : "Unknown",
+        status: payment.status,
+        requester: payment.Requester.username,
+        iban: payment.Requester.iban,
+        revolutLink: payment.Requester.revolutLink
       });
     } catch (err) {
       console.error("GET DETAILS ERROR:", err);
