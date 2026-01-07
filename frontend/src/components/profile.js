@@ -12,7 +12,6 @@ const fetchUserProfile = async () => {
     const userId = localStorage.getItem('userId');
     state.loading = true;
     try {
-
         const response = await fetch(`${API_BASE_URL}/user/getprofile`, {
             headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
         });
@@ -71,7 +70,7 @@ const updatePassword = async () => {
         });
         if (response.ok) {
             alert("Password updated!");
-            state.user.password = ''; // Clear the field
+            state.user.password = ''; 
         } else alert("Failed to update password");
     } catch (err) {
         console.error(err);
@@ -112,73 +111,79 @@ const updateRevolut = async () => {
     }
 };
 
+if (!document.querySelector('meta[name="viewport"]')) {
+    const meta = document.createElement('meta');
+    meta.name = "viewport";
+    meta.content = "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no";
+    document.head.appendChild(meta);
+}
+
 const profileView = html`
-<div class="dashboard-pane">
+<div class="profile-content">
     <div class="profile-header">
         <button id="back-button" @click="${() => navigateTo('dashboard')}"> ⬅️ </button>
         <h2 id="title">User Profile</h2>
-        <button id="edit-toggle" @click="${() => state.isEditing = !state.isEditing}">
-            ${() => state.isEditing ? 'Finish' : 'Edit Profile'}
-        </button>
     </div>
 
-    <div class="profile-content">
-        ${() => state.loading 
-            ? html`<p>Loading...</p>`
-            : html`
-            <div class="profile-form">
-                <div class="field-group">
-                    <label>Username</label>
-                    <div class="input-row">
-                        <input type="text" value="${() => state.user.username}" 
-                            readonly="${() => !state.isEditing}" 
-                            @input="${e => state.user.username = e.target.value}" />
-                        ${() => state.isEditing ? html`<button class="save-btn" @click="${updateUsername}">Save</button>` : ''}
-                    </div>
-                </div>
-
-                <div class="field-group">
-                    <label>Email</label>
-                    <div class="input-row">
-                        <input type="email" value="${() => state.user.email}" 
-                            readonly="${() => !state.isEditing}" 
-                            @input="${e => state.user.email = e.target.value}" />
-                        ${() => state.isEditing ? html`<button class="save-btn" @click="${updateEmail}">Save</button>` : ''}
-                    </div>
-                </div>
-
-                <div class="field-group">
-                    <label>New Password</label>
-                    <div class="input-row">
-                        <input type="password" placeholder="••••••••" 
-                            readonly="${() => !state.isEditing}" 
-                            @input="${e => state.user.password = e.target.value}" />
-                        ${() => state.isEditing ? html`<button class="save-btn" @click="${updatePassword}">Save</button>` : ''}
-                    </div>
-                </div>
-
-                <div class="field-group">
-                    <label>IBAN</label>
-                    <div class="input-row">
-                        <input type="text" value="${() => state.user.iban}" 
-                            readonly="${() => !state.isEditing}" 
-                            @input="${e => state.user.iban = e.target.value}" />
-                        ${() => state.isEditing ? html`<button class="save-btn" @click="${updateIban}">Save</button>` : ''}
-                    </div>
-                </div>
-
-                <div class="field-group">
-                    <label>Revolut Link</label>
-                    <div class="input-row">
-                        <input type="text" value="${() => state.user.revolutLink}" 
-                            readonly="${() => !state.isEditing}" 
-                            @input="${e => state.user.revolutLink = e.target.value}" />
-                        ${() => state.isEditing ? html`<button class="save-btn" @click="${updateRevolut}">Save</button>` : ''}
-                    </div>
+    ${() => state.loading 
+        ? html`<p style="text-align:center; margin-top: 50px;">Loading...</p>`
+        : html`
+        <div class="profile-form">
+            <div class="field-group">
+                <label>Username</label>
+                <div class="input-row">
+                    <input type="text" value="${() => state.user.username}" 
+                        readonly="${() => !state.isEditing}" 
+                        @input="${e => state.user.username = e.target.value}" />
+                    ${() => state.isEditing ? html`<button class="save-btn" @click="${updateUsername}">Save</button>` : ''}
                 </div>
             </div>
-        `}
-    </div>
+
+            <div class="field-group">
+                <label>Email</label>
+                <div class="input-row">
+                    <input type="email" value="${() => state.user.email}" 
+                        readonly="${() => !state.isEditing}" 
+                        @input="${e => state.user.email = e.target.value}" />
+                    ${() => state.isEditing ? html`<button class="save-btn" @click="${updateEmail}">Save</button>` : ''}
+                </div>
+            </div>
+
+            <div class="field-group">
+                <label>New Password</label>
+                <div class="input-row">
+                    <input type="password" placeholder="••••••••" 
+                        readonly="${() => !state.isEditing}" 
+                        @input="${e => state.user.password = e.target.value}" />
+                    ${() => state.isEditing ? html`<button class="save-btn" @click="${updatePassword}">Save</button>` : ''}
+                </div>
+            </div>
+
+            <div class="field-group">
+                <label>IBAN</label>
+                <div class="input-row">
+                    <input type="text" value="${() => state.user.iban}" 
+                        readonly="${() => !state.isEditing}" 
+                        @input="${e => state.user.iban = e.target.value}" />
+                    ${() => state.isEditing ? html`<button class="save-btn" @click="${updateIban}">Save</button>` : ''}
+                </div>
+            </div>
+
+            <div class="field-group">
+                <label>Revolut Link</label>
+                <div class="input-row">
+                    <input type="text" value="${() => state.user.revolutLink}" 
+                        readonly="${() => !state.isEditing}" 
+                        @input="${e => state.user.revolutLink = e.target.value}" />
+                    ${() => state.isEditing ? html`<button class="save-btn" @click="${updateRevolut}">Save</button>` : ''}
+                </div>
+            </div>
+        </div>
+
+        <button id="edit-toggle" @click="${() => state.isEditing = !state.isEditing}">
+            ${() => state.isEditing ? 'Finish Editing' : 'Edit Profile'}
+        </button>
+    `}
 </div>
 `;
 

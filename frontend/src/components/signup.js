@@ -31,31 +31,38 @@ const handleSignup = async (event) => {
 };
 
 const signup = html`
-    <div class="main-content">
-        <h2 id="title">Create new account</h2>
-        <form @submit="${handleSignup}">
-            <label for="username">Username:</label><br>
-            <input type="text" id="username" name="username" required><br><br>
-            
-            <label for="password">Password:</label><br>
-            <input type="password" id="password" name="password" required><br><br>
-            
-            <label for="email">Email:</label><br>
-            <input type="email" id="email" name="email" required><br><br>
+    <div class="signup-wrapper">
+        <div class="container">
+            <div class="main-content">
+                
+                <h2 id="title">Create new account</h2>
+                
+                <form @submit="${handleSignup}">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                    
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                    
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
 
-            <label for="iban">IBAN:</label><br>
-            <input type="text" id="iban" name="iban" required><br><br>
+                    <label for="iban">IBAN</label>
+                    <input type="text" id="iban" name="iban" required>
 
-            <label for="revolutLink">Revolut payment link:</label><br>
-            <input type="text" id="revolutLink" name="revolutLink" required><br><br>
-            
-            <div class="button-group">
-                <button type="submit" id="signin-button">Create account</button>
-                <button type="button" class="secondary-button" @click="${() => navigateTo('login')}">
-                    Back to Login
-                </button>
+                    <label for="revolutLink">Revolut Link</label>
+                    <input type="text" id="revolutLink" name="revolutLink" required>
+                    
+                    <div class="button-group">
+                        <button type="submit" id="signin-button">Create Account</button>
+                        <button type="button" id="back-login-btn" @click="${() => navigateTo('login')}">
+                            Back to Login
+                        </button>
+                    </div>
+                </form>
+
             </div>
-        </form>
+        </div>
     </div>
 `;
 

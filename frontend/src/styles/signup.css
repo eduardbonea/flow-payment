@@ -1,84 +1,188 @@
-body {
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #211A1D;
+.signup-wrapper {
+    font-family: 'Inter', sans-serif;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    color: white;
 }
 
-.container {
-  background-color: #6320EE; 
-  padding: 40px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+.signup-wrapper * {
+    box-sizing: border-box;
 }
 
-.main-content {
-    background-color: #8075FF;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+.signup-wrapper {
+    position: fixed; 
+    top: 0;
+    left: 0;
     width: 100%;
-    max-width: 400px;
+    height: 100vh;
+    background-color: #211A1D;
+    z-index: 9999;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    overflow-y: auto; 
+    padding: 20px 0; 
 }
 
-#title {
-    color: #F0F0F0;
+.signup-wrapper .container {
+    background-color: #6320EE; 
+    padding: 30px; 
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    
+    width: 90%; 
+    max-width: 450px; 
+    margin: auto; 
+    position: relative;
+}
+
+/* --- MODIFICARE CHEIE PENTRU ORDONARE --- */
+.signup-wrapper .main-content {
+    background-color: #8075FF;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    width: 100%;
+
+    /* FORȚĂM containerul să fie flex column */
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+/* --- FORȚĂM TITLUL SĂ FIE PRIMUL --- */
+.signup-wrapper #title {
+    /* order: -1 asigură că e primul element vizual */
+    order: -1 !important; 
+    
+    color: #fff;
     text-align: center;
-    margin: 8px;
-    margin-bottom: 25px;
+    margin: 0 0 25px 0 !important; /* Margine doar jos */
+    font-size: 1.8rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 1.2;
 }
 
-.main-content form {
+/* --- FORȚĂM FORMULARUL SĂ FIE AL DOILEA --- */
+.signup-wrapper form {
+    /* order: 2 asigură că e după titlu */
+    order: 2 !important;
+    
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.signup-wrapper label {
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    margin-top: 15px;
+    display: block; 
+    text-transform: uppercase;
+}
+
+.signup-wrapper label:first-of-type {
+    margin-top: 0;
+}
+
+.signup-wrapper input {
+    width: 100%;
+    height: 50px; 
+    padding: 0 15px;
+    
+    background-color: #211A1D; 
+    color: #fff; 
+    border: 2px solid transparent;
+    border-radius: 10px;
+    
+    font-size: 16px;
+    outline: none;
+    
+    appearance: none;
+    -webkit-appearance: none;
+    box-shadow: none;
+}
+
+.signup-wrapper input:focus {
+    border-color: #fff;
+    background-color: #000;
+}
+
+.signup-wrapper .button-group {
+    margin-top: 30px;
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
-.main-content label {
-    font-weight: 700;
-    color: var(--text-color-light); 
-    font-size: 1rem;
-    display: block;
-    margin-bottom: -10px;
-}
-
-.main-content input[type="text"],
-.main-content input[type="password"],
-.main-content input[type="email"] { 
+.signup-wrapper #signin-button {
     width: 100%;
-    padding: 14px 12px;
-    margin: 0; 
-    
-    border: 2px solid transparent; 
-    border-radius: 8px;
-    box-sizing: border-box;
-    background-color: #CAD5CA;
-    color: #211A1D;  
-    font-size: 17px;
-    transition: all 0.3s ease;
-}
-
-.main-content input:focus {
-    border-color: #6320EE;  
-    box-shadow: 0 0 0 3px rgba(99, 32, 238, 0.4);
-    outline: none;
-}
-
-#signin-button {
-    margin-top: 25px;
-    padding: 14px 20px;
-    font-size: 1.1rem;
-    font-weight: bold;
+    height: 55px;
+    background-color: #259225;
+    color: #fff;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    text-transform: uppercase;
     cursor: pointer;
-    background-color: #CAD5CA;
-    color: #211A1D;  
-    width: 100%; 
-    transition: background-color 0.3s;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    
+    appearance: none;
+    -webkit-appearance: none;
 }
 
-#signin-button:hover {
-    background-color: #b7c1b7;
+.signup-wrapper #signin-button:hover {
+    background-color: #2db32d;
+}
+
+.signup-wrapper #back-login-btn {
+    width: 100%;
+    height: 45px;
+    background: transparent;
+    border: 2px solid rgba(255,255,255,0.3);
+    color: #fff;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.signup-wrapper #back-login-btn:hover {
+    background-color: rgba(255,255,255,0.1);
+    border-color: #fff;
+}
+
+@media screen and (max-width: 600px) {
+    .signup-wrapper {
+        align-items: flex-start; 
+    }
+
+    .signup-wrapper .container {
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        border-radius: 0;
+        background-color: #6320EE; 
+        box-shadow: none;
+        
+        min-height: 100%; 
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .signup-wrapper .main-content {
+        background-color: #8075FF;
+        border-radius: 20px; 
+        padding: 20px;
+    }
 }
