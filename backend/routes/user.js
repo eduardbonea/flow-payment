@@ -8,6 +8,8 @@ userRouter.get('/getProfile', authenticateToken, userController.getProfile);
 userRouter.patch('/patchusername/:id', userController.updateUsername);
 userRouter.patch('/patchpassword/:id', userController.updatePassword);
 userRouter.patch('/patchemail/:id', userController.updateEmail);
+userRouter.patch('/patchiban/:id', userController.updateIban);
+userRouter.patch('/patchrevlink/:id', userController.updateRevLink);
 userRouter.delete('/delete/:id', userController.delete);
 
 module.exports = userRouter;

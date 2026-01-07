@@ -1,122 +1,58 @@
 import { html, reactive } from '@arrow-js/core';
-import {appState, navigateTo, API_BASE_URL} from '../app/app.js';
+import { appState, navigateTo, API_BASE_URL } from '../app/app.js';
 import '../styles/profile.css';
 
 const state = reactive({
-    user: { username: '', email: '', password: '', iban: '', revolutLink: '' },
+    user: { id: '', username: '', email: '', password: '', iban: '', revolutLink: '' },
     isEditing: false,
     loading: true
 });
 
 const fetchUserProfile = async () => {
-    const userId = localStorage.getItem('userId');
     state.loading = true;
+    const token = localStorage.getItem('authToken');
     try {
         const response = await fetch(`${API_BASE_URL}/user/getprofile`, {
-            headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
+            headers: { 'Authorization': `Bearer ${token}` }
         });
         const data = await response.json();
-        state.user = { ...data, password: '' }; 
+        const dbId = data.id || data._id;
+        state.user = { ...data, id: dbId, password: '' };
+        if (dbId) localStorage.setItem('userId', dbId);
         state.loading = false;
     } catch (err) {
-        console.error("Failed to load profile", err);
-    }
-};
-
-const updateUsername = async () => {
-    try {
-        const response = await fetch(`/api/user/patchusername`, {
-            method: 'PATCH',
-            headers: { 
-                'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ username: state.user.username })
-        });
-        if (response.ok) alert("Username updated!");
-        else alert("Failed to update username");
-    } catch (err) {
         console.error(err);
+        state.loading = false;
     }
 };
 
-const updateEmail = async () => {
-    try {
-        const response = await fetch(`/api/user/patchemail`, {
-            method: 'PATCH',
-            headers: { 
-                'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ email: state.user.email })
-        });
-        if (response.ok) alert("Email updated!");
-        else alert("Failed to update email");
-    } catch (err) {
-        console.error(err);
-    }
-};
+const updateField = async (field, endpoint) => {
+    const userId = localStorage.getItem('userId') || state.user.id;
+    const token = localStorage.getItem('authToken');
+    const value = state.user[field];
 
-const updatePassword = async () => {
-    if (!state.user.password) return alert("Please enter a new password");
+    if (!userId || userId === 'undefined') return alert("Error: User ID missing.");
+
     try {
-        const response = await fetch(`/api/user/patchpassword`, {
+        const response = await fetch(`${API_BASE_URL}${endpoint}/${userId}`, {
             method: 'PATCH',
-            headers: { 
-                'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+            headers: {
+                'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ password: state.user.password })
+            body: JSON.stringify({ [field]: value })
         });
+
         if (response.ok) {
-            alert("Password updated!");
-            state.user.password = ''; 
-        } else alert("Failed to update password");
+            alert(`${field.charAt(0).toUpperCase() + field.slice(1)} updated!`);
+            if (field === 'password') state.user.password = '';
+        } else {
+            alert("Update failed.");
+        }
     } catch (err) {
         console.error(err);
     }
 };
-
-const updateIban = async () => {
-    try {
-        const response = await fetch(`/api/user/patchiban`, {
-            method: 'PATCH',
-            headers: { 
-                'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ iban: state.user.iban })
-        });
-        if (response.ok) alert("IBAN updated!");
-        else alert("Failed to update IBAN");
-    } catch (err) {
-        console.error(err);
-    }
-};
-
-const updateRevolut = async () => {
-    try {
-        const response = await fetch(`/api/user/patchrevolut`, {
-            method: 'PATCH',
-            headers: { 
-                'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ revolutLink: state.user.revolutLink })
-        });
-        if (response.ok) alert("Revolut link updated!");
-        else alert("Failed to update Revolut link");
-    } catch (err) {
-        console.error(err);
-    }
-};
-
-if (!document.querySelector('meta[name="viewport"]')) {
-    const meta = document.createElement('meta');
-    meta.name = "viewport";
-    meta.content = "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no";
-    document.head.appendChild(meta);
-}
 
 const profileView = html`
 <div class="profile-content">
@@ -135,7 +71,7 @@ const profileView = html`
                     <input type="text" value="${() => state.user.username}" 
                         readonly="${() => !state.isEditing}" 
                         @input="${e => state.user.username = e.target.value}" />
-                    ${() => state.isEditing ? html`<button class="save-btn" @click="${updateUsername}">Save</button>` : ''}
+                    ${() => state.isEditing ? html`<button class="save-btn" @click="${() => updateField('username', '/user/patchusername')}">Save</button>` : ''}
                 </div>
             </div>
 
@@ -145,7 +81,7 @@ const profileView = html`
                     <input type="email" value="${() => state.user.email}" 
                         readonly="${() => !state.isEditing}" 
                         @input="${e => state.user.email = e.target.value}" />
-                    ${() => state.isEditing ? html`<button class="save-btn" @click="${updateEmail}">Save</button>` : ''}
+                    ${() => state.isEditing ? html`<button class="save-btn" @click="${() => updateField('email', '/user/patchemail')}">Save</button>` : ''}
                 </div>
             </div>
 
@@ -155,7 +91,7 @@ const profileView = html`
                     <input type="password" placeholder="••••••••" 
                         readonly="${() => !state.isEditing}" 
                         @input="${e => state.user.password = e.target.value}" />
-                    ${() => state.isEditing ? html`<button class="save-btn" @click="${updatePassword}">Save</button>` : ''}
+                    ${() => state.isEditing ? html`<button class="save-btn" @click="${() => updateField('password', '/user/patchpassword')}">Save</button>` : ''}
                 </div>
             </div>
 
@@ -165,7 +101,7 @@ const profileView = html`
                     <input type="text" value="${() => state.user.iban}" 
                         readonly="${() => !state.isEditing}" 
                         @input="${e => state.user.iban = e.target.value}" />
-                    ${() => state.isEditing ? html`<button class="save-btn" @click="${updateIban}">Save</button>` : ''}
+                    ${() => state.isEditing ? html`<button class="save-btn" @click="${() => updateField('iban', '/user/patchiban')}">Save</button>` : ''}
                 </div>
             </div>
 
@@ -175,7 +111,7 @@ const profileView = html`
                     <input type="text" value="${() => state.user.revolutLink}" 
                         readonly="${() => !state.isEditing}" 
                         @input="${e => state.user.revolutLink = e.target.value}" />
-                    ${() => state.isEditing ? html`<button class="save-btn" @click="${updateRevolut}">Save</button>` : ''}
+                    ${() => state.isEditing ? html`<button class="save-btn" @click="${() => updateField('revolutLink', '/user/patchrevlink')}">Save</button>` : ''}
                 </div>
             </div>
         </div>

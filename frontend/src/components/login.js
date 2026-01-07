@@ -15,16 +15,21 @@ const handleLogin = async (event) => {
             body: JSON.stringify(data),
         });
 
-        let result = {};
-        try {
-            result = await response.json();
-        } catch (e) {
-            result.message = `Eroare HTTP: ${response.status}`;
-        }
+        const result = await response.json();
 
         if (response.ok) {
             localStorage.setItem('authToken', result.token);
-            localStorage.setItem('userId', result.userId);
+            
+            // DECODARE JWT PENTRU ID
+            try {
+                const payload = JSON.parse(atob(result.token.split('.')[1]));
+                const userId = payload.id || payload.sub; // Căutăm 'id' în token
+                localStorage.setItem('userId', userId);
+                console.log("ID extras cu succes:", userId);
+            } catch (e) {
+                console.error("Nu am putut extrage ID-ul din token:", e);
+            }
+
             appState.isAuthenticated = true;
             navigateTo('dashboard'); 
         } else {
@@ -40,24 +45,18 @@ const Login = html`
         <div class="container">
             <div class="login-pane">
                 <h2 id="title-login">Login</h2>
-                
                 <form @submit="${handleLogin}">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username" required>
-
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required>
-
+                    <label>Username</label>
+                    <input type="text" name="username" required>
+                    <label>Password</label>
+                    <input type="password" name="password" required>
                     <div class="button-group">
                         <button type="submit" id="login-button">Sign In</button>
-                        <button type="button" id="signup-button" @click="${() => navigateTo('signup')}">
-                            Sign up
-                        </button>
+                        <button type="button" @click="${() => navigateTo('signup')}">Sign up</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 `;
-
 export default Login;

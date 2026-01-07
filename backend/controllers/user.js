@@ -101,6 +101,52 @@ const controller = {
         };
     },
 
+    updateIban: async (req, res) => {
+        try{
+            const userId = req.params.id;
+            const newIban = req.body.iban;
+            const updateIban = {
+                id: userId,
+                iban: newIban,
+            };
+            const patchIban = await userDb.update(
+                {iban: newIban},
+                {
+                    where: {
+                        id: userId
+                    }
+                }
+            );
+           res.status(200).json('Iban updated successfully');
+        }catch(err){
+            console.log(err);
+            res.status(500).json('Server error!');
+        };
+    },
+ 
+    updateRevLink: async (req, res) => {
+        try{
+            const userId = req.params.id;
+            const newRevLink = req.body.revolutLink;
+            const updateRevLink = {
+                id: userId,
+                iban: newRevLink,
+            };
+            const patchRevLink = await userDb.update(
+                {revolutLink: newRevLink},
+                {
+                    where: {
+                        id: userId
+                    }
+                }
+            );
+           res.status(200).json('Revolut Link updated successfully');
+        }catch(err){
+            console.log(err);
+            res.status(500).json('Server error!');
+        };
+    },
+
     delete: async (req, res) => {
         try{
             const userId = req.params.id;
