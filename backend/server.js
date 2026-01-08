@@ -6,12 +6,13 @@ const app = express();
 const db = require('./models').db;
 const router = require('./routes');
 
-const authMiddleware = require('./middleware/auth');
+const { authMiddleware, globalLimiter } = require('./middleware');
 
 const port = process.env.PORT || 3000;
 
 app.use(cors({ origin: 'http://localhost:5173' }));
 app.use(express.json());
+app.use(globalLimiter);
 
 app.get('/api/dashboard', authMiddleware, (req, res) => {
     res.status(200).json({ 

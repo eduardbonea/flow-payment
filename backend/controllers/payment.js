@@ -2,8 +2,7 @@ const paymentDb = require("../models").paymentModel;
 const userDb = require("../models").userModel;
 const payerDb = require("../models").payerModel;
 const paymentHistoryDb = require("../models").paymentHistoryModel;
-const { generateUUID } = require("../utils/uuid");
-const { sendPaymentNotificationEmail } = require("../utils/mail");
+const { generateUUID, sendPaymentNotificationEmail } = require("../utils");
 
 const controller = {
   create: async (req, res) => {

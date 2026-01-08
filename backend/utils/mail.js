@@ -21,9 +21,7 @@ const sendPaymentNotificationEmail = async (
           <p>Great news! <strong>${guestName}</strong> has marked the payment as sent.</p>
           
           <div style="background-color: #f4f4f4; padding: 15px; border-radius: 5px; margin: 20px 0;">
-            <p style="margin: 0;"><strong>Payment Details:</strong> ${
-              paymentDescription || "Not provided"
-            }</p>
+            <p style="margin: 0;"><strong>Payment Details:</strong> ${paymentDescription}</p>
             <p style="margin: 5px 0 0 0; color: #666;">Please check your bank account to verify receipt.</p>
           </div>
 
