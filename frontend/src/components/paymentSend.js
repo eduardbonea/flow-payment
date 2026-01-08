@@ -9,7 +9,7 @@ const state = reactive({
   phone: "",
   amount: "",
   description: "",
-  iban: "", 
+  iban: "",
   revolutLink: "",
   isLoaded: false,
   error: null,
@@ -17,11 +17,12 @@ const state = reactive({
   isSubmitting: false,
   showModal: false,
   ibanCopied: false,
+  isSendingEmail: false,
   errors: {
     username: "",
     email: "",
-    phone: ""
-  }
+    phone: "",
+  },
 });
 
 async function fetchDetails(uuid) {
@@ -32,13 +33,13 @@ async function fetchDetails(uuid) {
       throw new Error(errorData || "Payment request not found or expired");
     }
     const data = await response.json();
-    
+
     state.amount = data.amount;
     state.description = data.description;
     state.requester = data.requester;
-    state.iban = data.iban || ""; 
-    state.revolutLink = data.revolutLink || ""; 
-    
+    state.iban = data.iban || "";
+    state.revolutLink = data.revolutLink || "";
+
     state.isLoaded = true;
   } catch (err) {
     state.error = err.message;
@@ -48,8 +49,8 @@ async function fetchDetails(uuid) {
 
 function validateForm() {
   let isValid = true;
-  
-  if (!state.username.trim() || state.username.trim().split(' ').length < 2) {
+
+  if (!state.username.trim() || state.username.trim().split(" ").length < 2) {
     state.errors.username = "Please enter your full name";
     isValid = false;
   } else {
@@ -77,7 +78,7 @@ function validateForm() {
 
 async function handleSubmit(event, uuid) {
   event.preventDefault();
-  
+
   if (!validateForm()) return;
   if (state.isSubmitting) return;
 
@@ -111,30 +112,51 @@ async function handleSubmit(event, uuid) {
 }
 
 const copyIban = () => {
-    if(state.iban) {
-        navigator.clipboard.writeText(state.iban);
-        state.ibanCopied = true;
-        setTimeout(() => { state.ibanCopied = false; }, 2000);
-    }
-}
+  if (state.iban) {
+    navigator.clipboard.writeText(state.iban);
+    state.ibanCopied = true;
+    setTimeout(() => {
+      state.ibanCopied = false;
+    }, 2000);
+  }
+};
 
 const openRevolut = () => {
-    if(state.revolutLink) {
-        const link = state.revolutLink.startsWith('http') ? state.revolutLink : `https://${state.revolutLink}`;
-        window.open(link, '_blank');
-    } else {
-        alert("No Revolut link provided.");
-    }
-}
+  if (state.revolutLink) {
+    const link = state.revolutLink.startsWith("http")
+      ? state.revolutLink
+      : `https://${state.revolutLink}`;
+    window.open(link, "_blank");
+  } else {
+    alert("No Revolut link provided.");
+  }
+};
 
-const closeAndFinish = () => {
+const closeAndFinish = async () => {
+  if (state.isSendingEmail) return;
+  state.isSendingEmail = true;
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/payment/notify`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        uuid: state.currentUuid,
+        email: state.email,
+      }),
+    });
+  } catch (error) {
+    console.log("Failed to send notification email:", error);
+  } finally {
+    state.isSendingEmail = false;
     state.showModal = false;
-    navigateTo("login"); 
-}
+    navigateTo("login");
+  }
+};
 
 const clearError = (field) => {
-    state.errors[field] = "";
-}
+  state.errors[field] = "";
+};
 
 const paymentSend = (uuid) => {
   if (uuid && uuid !== state.currentUuid) {
@@ -149,7 +171,7 @@ const paymentSend = (uuid) => {
     <div class="payment-send-wrapper">
       ${() => {
         if (state.error) {
-          return html`<div class="status-msg">⚠️ ${state.error}</div>`;
+          return html`<div class="status-msg"> ${state.error}</div>`;
         }
         if (!state.isLoaded) {
           return html`<div class="status-msg">Loading payment details...</div>`;
@@ -171,77 +193,134 @@ const paymentSend = (uuid) => {
               <form id="sendForm" @submit="${(e) => handleSubmit(e, uuid)}">
                 <div class="field full">
                   <label>Full Name</label>
-                  <input 
-                    type="text" 
-                    placeholder="Your Name" 
-                    class="${() => state.errors.username ? 'error' : ''}"
-                    @input="${(e) => { state.username = e.target.value; clearError('username'); }}" 
+                  <input
+                    type="text"
+                    placeholder="Your Name"
+                    class="${() => (state.errors.username ? "error" : "")}"
+                    @input="${(e) => {
+                      state.username = e.target.value;
+                      clearError("username");
+                    }}"
                   />
-                  ${() => state.errors.username ? html`<span class="error-msg">${state.errors.username}</span>` : ''}
+                  ${() =>
+                    state.errors.username
+                      ? html`<span class="error-msg"
+                          >${state.errors.username}</span
+                        >`
+                      : ""}
                 </div>
 
                 <div class="field">
                   <label>Email</label>
-                  <input 
-                    type="email" 
-                    placeholder="email@example.com" 
-                    class="${() => state.errors.email ? 'error' : ''}"
-                    @input="${(e) => { state.email = e.target.value; clearError('email'); }}" 
+                  <input
+                    type="email"
+                    placeholder="email@example.com"
+                    class="${() => (state.errors.email ? "error" : "")}"
+                    @input="${(e) => {
+                      state.email = e.target.value;
+                      clearError("email");
+                    }}"
                   />
-                  ${() => state.errors.email ? html`<span class="error-msg">${state.errors.email}</span>` : ''}
+                  ${() =>
+                    state.errors.email
+                      ? html`<span class="error-msg"
+                          >${state.errors.email}</span
+                        >`
+                      : ""}
                 </div>
 
                 <div class="field">
                   <label>Phone</label>
-                  <input 
-                    type="tel" 
-                    placeholder="07xx xxx xxx" 
-                    class="${() => state.errors.phone ? 'error' : ''}"
-                    @input="${(e) => { state.phone = e.target.value; clearError('phone'); }}" 
+                  <input
+                    type="tel"
+                    placeholder="07xx xxx xxx"
+                    class="${() => (state.errors.phone ? "error" : "")}"
+                    @input="${(e) => {
+                      state.phone = e.target.value;
+                      clearError("phone");
+                    }}"
                   />
-                  ${() => state.errors.phone ? html`<span class="error-msg">${state.errors.phone}</span>` : ''}
+                  ${() =>
+                    state.errors.phone
+                      ? html`<span class="error-msg"
+                          >${state.errors.phone}</span
+                        >`
+                      : ""}
                 </div>
 
-                <button type="submit" id="pay-btn" ?disabled="${() => state.isSubmitting}">
-                  ${() => state.isSubmitting ? "Processing..." : "Select Payment Method"}
+                <button
+                  type="submit"
+                  id="pay-btn"
+                  disabled="${() => state.isSubmitting}"
+                >
+                  ${() =>
+                    state.isSubmitting
+                      ? "Processing..."
+                      : "Select Payment Method"}
                 </button>
               </form>
             </div>
           </div>
 
-          ${() => state.showModal ? html`
-          <div class="modal-overlay">
-            <div class="modal-content">
-                <h3>Choose Payment Method</h3>
-                <p>Payment recorded. Please send <b>${state.amount} RON</b> using one of the methods below:</p>
-                
-                <div class="modal-options">
-                    <div class="option-box">
-                        <span class="option-label">Bank Transfer (IBAN)</span>
-                        <div class="iban-display">
-                            <input type="text" value="${state.iban || 'No IBAN provided'}" readonly />
-                            <button 
-                                type="button" 
-                                class="copy-btn ${state.ibanCopied ? 'success' : ''}" 
-                                @click="${copyIban}"
+          ${() =>
+            state.showModal
+              ? html`
+                  <div class="modal-overlay">
+                    <div class="modal-content">
+                      <h3>Choose Payment Method</h3>
+                      <p>
+                        Payment recorded. Please send
+                        <b>${state.amount} RON</b> using one of the methods
+                        below:
+                      </p>
+
+                      <div class="modal-options">
+                        <div class="option-box">
+                          <span class="option-label">Bank Transfer (IBAN)</span>
+                          <div class="iban-display">
+                            <input
+                              type="text"
+                              value="${state.iban || "No IBAN provided"}"
+                              readonly
+                            />
+                            <button
+                              type="button"
+                              class="copy-btn ${state.ibanCopied
+                                ? "success"
+                                : ""}"
+                              @click="${copyIban}"
                             >
-                                ${state.ibanCopied ? "Copied!" : "Copy"}
+                              ${state.ibanCopied ? "Copied!" : "Copy"}
                             </button>
+                          </div>
                         </div>
-                    </div>
 
-                    <div class="option-box">
-                        <span class="option-label">Revolut</span>
-                        <button type="button" class="revolut-btn" @click="${openRevolut}">
+                        <div class="option-box">
+                          <span class="option-label">Revolut</span>
+                          <button
+                            type="button"
+                            class="revolut-btn"
+                            @click="${openRevolut}"
+                          >
                             Pay via Revolut ↗
-                        </button>
-                    </div>
-                </div>
+                          </button>
+                        </div>
+                      </div>
 
-                <button class="close-modal-btn" @click="${closeAndFinish}">I have sent the money</button>
-            </div>
-          </div>
-          ` : ''}
+                      <button
+                        class="close-modal-btn"
+                        @click="${closeAndFinish}"
+                        disabled="${() => state.isSendingEmail}"
+                      >
+                        ${() =>
+                          state.isSendingEmail
+                            ? "Notifying..."
+                            : "I have sent the money"}
+                      </button>
+                    </div>
+                  </div>
+                `
+              : ""}
         `;
       }}
     </div>

@@ -11,5 +11,6 @@ paymentRouter.delete('/delete/:id', authMiddleware, paymentController.delete);
 //PUBLIC ROUTES
 paymentRouter.get('/getDetails/:uuid', paymentController.getPaymentDetails);
 paymentRouter.patch('/patch', paymentController.update);
+paymentRouter.post('/notify', paymentController.notifyPaymentSent);
 
 module.exports = paymentRouter;

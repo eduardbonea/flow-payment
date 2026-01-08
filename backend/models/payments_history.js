@@ -18,7 +18,7 @@ const paymentHistoryModel = db.define(
             allowNull: false
         },
         status: {
-            type: DataTypes.ENUM('in_progress', 'finished', 'canceled'),
+            type: DataTypes.ENUM('in_progress', 'finished', 'pending', 'canceled'),
             allowNull: false,
             defaultValue: 'in_progress'
         },
