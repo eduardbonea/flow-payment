@@ -42,7 +42,7 @@ const paymentModel = db.define (
             allowNull: false
         },
         status:{
-            type: DataTypes.ENUM('finished', 'in_progress', 'canceled'),
+            type: DataTypes.ENUM('finished', 'in_progress', 'pending', 'canceled'),
             allowNull: false,
             defaultValue: 'in_progress'
         },

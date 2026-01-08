@@ -2,7 +2,7 @@ const paymentDb = require("../models").paymentModel;
 const userDb = require("../models").userModel;
 const payerDb = require("../models").payerModel;
 const paymentHistoryDb = require("../models").paymentHistoryModel;
-const { generateUUID } = require("../utils/uuid");
+const { generateUUID, sendPaymentNotificationEmail } = require("../utils");
 
 const controller = {
   create: async (req, res) => {
@@ -60,7 +60,7 @@ const controller = {
         status: payment.status,
         requester: payment.Requester.username,
         iban: payment.Requester.iban,
-        revolutLink: payment.Requester.revolutLink
+        revolutLink: payment.Requester.revolutLink,
       });
     } catch (err) {
       console.error("GET DETAILS ERROR:", err);
@@ -108,7 +108,7 @@ const controller = {
       await paymentHistoryDb.create({
         idPay: payment.id,
         idPayer: newPayer.id,
-        status: "finished",
+        status: "pending",
         createdAt: new Date(),
       });
 
@@ -123,6 +123,72 @@ const controller = {
     } catch (err) {
       console.error("GUEST PAY ERROR:", err);
       res.status(500).json("Server Error during payment processing");
+    }
+  },
+
+  notifyPaymentSent: async (req, res) => {
+    try {
+      const { uuid, email } = req.body;
+
+      console.log("Processing notify for:", email, uuid);
+
+      if (!uuid || !email) {
+        return res.status(400).json("UUID and Email are required.");
+      }
+
+      const payment = await paymentDb.findOne({ where: { UUID: uuid } });
+      if (!payment) {
+        return res.status(404).json("Payment link invalid.");
+      }
+
+      const user = await userDb.findOne({ where: { id: payment.idRequester } });
+
+      if (!user) {
+        console.error("User not found for payment:", payment.id);
+        return res.status(404).json("User requester not found.");
+      }
+
+      const payer = await payerDb.findOne({
+        where: { idPay: payment.id, email: email },
+      });
+
+      if (!payer) {
+        return res.status(404).json("Guest details not found.");
+      }
+
+      let historyEntry = await paymentHistoryDb.findOne({
+        where: { idPay: payment.id, idPayer: payer.id },
+      });
+
+      if (historyEntry && historyEntry.status === "finished") {
+        return res.status(200).json({ message: "Already notified." });
+      }
+
+      if (historyEntry) {
+        await historyEntry.update({
+          status: "finished",
+          updatedAt: new Date(),
+        });
+      } else {
+        await paymentHistoryDb.create({
+          idPay: payment.id,
+          idPayer: payer.id,
+          status: "finished",
+          createdAt: new Date(),
+        });
+      }
+
+      await sendPaymentNotificationEmail(
+        user.email,
+        user.username || "User",
+        payer.username || "Guest",
+        payment.description
+      );
+
+      res.status(200).json({ message: "user notified successfully!" });
+    } catch (err) {
+      console.error("NOTIFY ERROR:", err);
+      res.status(500).json({ message: "Server Error", error: err.message });
     }
   },
 
