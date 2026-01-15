@@ -6,6 +6,7 @@ const {authMiddleware, emailLimiter} = require('../middleware');
 // PRIVATE ROUTES
 paymentRouter.post('/create', authMiddleware, paymentController.create);
 paymentRouter.get('/getHistory', authMiddleware, paymentController.getPaymentsHistory);
+paymentRouter.get('/getPaymentQR', authMiddleware, paymentController.getLastPayment);
 paymentRouter.delete('/delete/:id', authMiddleware, paymentController.delete);
 
 //PUBLIC ROUTES

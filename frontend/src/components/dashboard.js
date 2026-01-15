@@ -43,7 +43,7 @@ const refreshQRCode = async () => {
   const image = document.getElementById("qrCodeImage");
   if (!userId || !image) return;
   try {
-    const paymentURL = `${window.location.origin}/pay-request/${userId}`;
+    const paymentURL = `${API_BASE_URL}/payment/getPaymentQR`;
     const dataURL = await toDataURL(paymentURL, { width: 250, margin: 2 });
     image.src = dataURL;
   } catch (err) {

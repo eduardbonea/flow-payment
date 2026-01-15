@@ -68,6 +68,26 @@ const controller = {
     }
   },
 
+  getLastPayment: async (req, res) => {
+    try {
+      const userId = req.user.id;
+
+      const lastPayment = await paymentDb.findOne({
+        where: { userId: req.user.id },
+        order: [['createdAt', 'DESC']]
+      });
+
+      if (!history || history.length === 0) {
+        return res.status(404).json("No payment history found for this user");
+      }
+
+      res.status(200).json(history);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json("Server Error!");
+    }
+  },
+
   getPaymentsHistory: async (req, res) => {
     try {
       const userId = req.user.id;

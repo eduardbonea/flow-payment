@@ -1,5 +1,5 @@
 <h1 align="center">🌊 Flow payment 💵</h1>
-<h3 align="center">Proiectul echipei Flow</h3>
+<h3 align="center">Tikkie clone</h3>
 
 ---
 
@@ -36,7 +36,7 @@ Proiectul este construit folosind următoarele tehnologii:
 * **Crearea cererilor de plată**: Introducerea sumei și motivului, generarea unui cod QR.
 * **Vizualizarea cererilor**: Requesterii pot vedea statusul fiecărui requestee și totalul colectat.
 * **Acceptare/Refuz cereri**: Requestee-ii pot accepta sau refuza plățile prin interfața accesibilă cu QR code-ul.
-* **Notificări push**: Requesterii primesc notificări atunci când requestee-ii răspund cererilor.
+* **Notificări prin email**: Requesterii primesc notificări atunci când requestee-ii răspund cererilor.
 
 ---
 
@@ -63,19 +63,21 @@ Variabilele sunt definite în `docker-compose.yml` ca să fie importate din `.en
 
 ```bash
 # BACKEND
-PORT=
+PORT=3003
+
 JWT_SECRET=
 
-#DOCKER
-MYSQL_ROOT_PASSWORD=
+#EMAIL
+RESEND_API_KEY=
+FROM_MAIL=
 
 #DATABASE
-MYSQL_DATABASE=
-MYSQL_USER=
-MYSQL_PASSWORD=
-DB_HOST=database
-DB_DIALECT=mysql
-DB_CHARSET=utf8
+MYSQL_DATABASE=flow-app
+MYSQL_USER=flow-app
+MYSQL_PASSWORD=''
+DB_HOST='127.0.0.1'
+DB_DIALECT='mysql'
+DB_CHARSET='utf8'
 ```
 
 ### 3\. Pornirea Aplicației (Build & Run)
@@ -119,6 +121,7 @@ docker-compose down --rmi all -v
 | Funcționalitate | Tip rută | Path |
 | :--- | :--- | :--- |
 | **Resetare baza de date** | GET | /reset |
+| **Autentificare utilizator** | POST | /api/auth/login |
 
 ---
 
@@ -131,6 +134,8 @@ docker-compose down --rmi all -v
 | **Actualizare username** | PATCH | /api/user/patchusername/{userId} |
 | **Actualizare parolă** | PATCH | /api/user/patchpassword/{userId} |
 | **Actualizare email** | PATCH | /api/user/patchemail/{userId} |
+| **Actualizare IBAN** | PATCH | /api/user/patchiban/{userId} |
+| **Actualizare link de revolut** | PATCH | /api/user/patchrevlink/{userId} |
 | **Ștergere utilizator** | DELETE | /api/user/delete/{userId} |
 
 ---
@@ -141,8 +146,11 @@ docker-compose down --rmi all -v
 | :--- | :--- | :--- |
 | **Creare plată** | POST | /api/payment/create |
 | **Istoric plăți** | GET | /api/payment/getHistory |
+| **Link QR** | GET | /api/payment/getPaymentQR |
+| **Ștergere plată** | GET | /api/payment/delete/{paymentId} |
 | **Detalii plată** | GET | /api/payment/getDetails/{UUID} |
-| **Actualizare plată** | GET | /api/payment/patch |
+| **Actualizare plată** | PATCH | /api/payment/patch |
+| **Trimitere mail către utilizator** | POST | /api/payment/notify |
 
 
 ## 🌐 Hostarea Web - DevOps
@@ -162,10 +170,7 @@ Aplicația **Flow Payment** este găzduită prin intermediul [DigitalOcean](http
 * **DNS și SSL:** Cloudflare gestionează domeniul și oferă SSL gratuit pentru securizarea conexiunilor HTTPS.  
 * **Acces public:** Aplicația este accesibilă prin domeniul configurat în Cloudflare (`https://flow-payment.eduardbonea.com`).
 
-## 👨🏻‍💻👩🏻‍💻 Membrii echipei
+## 👨🏻‍💻👩🏻‍💻 Autor
 
 * **Eduard Bonea** - [GitHub](https://github.com/eduardbonea)
                    - [Website](https://eduardbonea.com)
-
-* **Ana-Maria Antonenco** - [GitHub](https://github.com/anamariaantonenco)
-                          - [Instagram](https://instagram.com/anamariaantonenco)
