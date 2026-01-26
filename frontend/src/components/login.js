@@ -19,14 +19,12 @@ const handleLogin = async (event) => {
 
         if (response.ok) {
             localStorage.setItem('authToken', result.token);
-            console.log(result.token)
             try {
                 const payload = JSON.parse(atob(result.token.split('.')[1]));
                 const userId = payload.id || payload.sub;
                 localStorage.setItem('userId', userId);
-                console.log("ID extras cu succes:", userId);
-            } catch (e) {
-                console.error("Nu am putut extrage ID-ul din token:", e);
+            } catch (err) {
+                console.error(err);
             }
 
             appState.isAuthenticated = true;

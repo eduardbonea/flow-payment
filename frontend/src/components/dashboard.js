@@ -39,15 +39,32 @@ const getHistory = async () => {
 };
 
 const refreshQRCode = async () => {
-  const userId = localStorage.getItem("userId");
+  const token = localStorage.getItem('authToken'); 
   const image = document.getElementById("qrCodeImage");
-  if (!userId || !image) return;
+
+  if (!token || !image) return;
+
   try {
-    const paymentURL = `${API_BASE_URL}/payment/getPaymentQR`;
-    const dataURL = await toDataURL(paymentURL, { width: 250, margin: 2 });
-    image.src = dataURL;
-  } catch (err) {
-    console.error(err);
+    const response = await fetch(`${API_BASE_URL}/payment/getPaymentQR`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    if (!response.ok) throw new Error("Eroare Backend");
+
+    const data = await response.json();
+    
+    if (data.url) {
+      const dataURL = await toDataURL(data.url, { 
+        width: 250, 
+        margin: 2 
+      });
+      image.src = dataURL;
+    }
+  }catch (err) {
+    console.error("Eroare la generare:", err);
   }
 };
 

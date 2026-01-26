@@ -8,7 +8,7 @@ import PaymentRequest from '../components/paymentRequest.js';
 import SignUp from '../components/signup.js';
 import Profile from '../components/profile.js';
 
-export const API_BASE_URL = 'http://localhost:3001/api';
+export const API_BASE_URL = 'http://localhost:3003/api';
 
 const root = document.getElementById('app');
 const initialAuthToken = localStorage.getItem('authToken');

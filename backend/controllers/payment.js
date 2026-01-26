@@ -70,20 +70,23 @@ const controller = {
 
   getLastPayment: async (req, res) => {
     try {
-      const userId = req.user.id;
+      const userId = req.user.id; 
 
       const lastPayment = await paymentDb.findOne({
-        where: { userId: req.user.id },
+        where: { idRequester: userId },
         order: [['createdAt', 'DESC']]
       });
 
-      if (!history || history.length === 0) {
-        return res.status(404).json("No payment history found for this user");
+      if (!lastPayment) {
+        return res.status(404).json({ message: "Nu a fost găsită nicio plată." });
       }
 
-      res.status(200).json(history);
+    const paymentLink = `${process.env.FRONTEND_URL}/pay/${lastPayment.UUID}`;
+
+    res.status(200).json({ url: paymentLink });
+
     } catch (err) {
-      console.log(err);
+      console.error("Error in getLastPayment:", err);
       res.status(500).json("Server Error!");
     }
   },
