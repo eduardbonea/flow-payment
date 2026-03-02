@@ -9,7 +9,7 @@ import SignUp from '../components/signup.js';
 import Profile from '../components/profile.js';
 
 export const API_BASE_URL = import.meta.env.MODE === 'production' 
-  ? 'https://flow-payment.eduardbonea.com/api' 
+  ? 'https://flow-app.eduardbonea.com/api' 
   : 'http://localhost:3003/api';
 
 const root = document.getElementById('app');
