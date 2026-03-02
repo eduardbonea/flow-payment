@@ -44,7 +44,7 @@ jobs:
 
             curl -f https://flow-app.eduardbonea.com || exit 1
 
-            STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST -H "Content-Type: application/json" -d '{"email":"test","password":"pass"}' https://flow-app.eduardbonea.com/api/auth/login)
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST -H "Content-Type: application/json" -d '{"username":"test","password":"pass"}' https://flow-app.eduardbonea.com/api/auth/login)
 
             echo "Status: $STATUS"
 
