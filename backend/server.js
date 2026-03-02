@@ -9,8 +9,9 @@ const router = require('./routes');
 const { authMiddleware, globalLimiter } = require('./middleware');
 
 const port = process.env.PORT || 3000;
+const origin = process.env.FRONTEND_URL || 'http://localhost:5173';
 
-app.use(cors({ origin: 'http://localhost:5173' }));
+app.use(cors({ origin: `${origin}` }));
 app.use(express.json());
 app.use(globalLimiter);
 
@@ -30,6 +31,10 @@ app.use('/api', router);
 app.get('/reset', async (req,res) => {
 	await db.sync({ force: true });
 	res.status(200).send('The database has been successfully reset ');
+});
+
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'ok'});
 });
 
 app.listen(port, () => {

@@ -62,6 +62,9 @@ cd flow-payment
 Variabilele sunt definite în `docker-compose.yml` ca să fie importate din `.env`, este nevoie să creați un fișier `.env` în directorul `backend/` cu următoarea structură:
 
 ```bash
+#FRONTEND
+FRONTEND_URL=http://localhost:5173
+
 # BACKEND
 PORT=3003
 

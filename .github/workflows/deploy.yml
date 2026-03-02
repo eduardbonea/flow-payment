@@ -1,0 +1,55 @@
+name: Deploy on production
+
+on:
+  push:
+    branches:
+      - release 
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /var/www/html/flow-payment
+
+            git fetch origin
+            git reset --hard origin/release
+
+            cd frontend
+            npm ci
+            npm run build
+
+            cd ../backend
+            npm ci
+            pm2 reload flow-app
+
+            sudo systemctl reload nginx
+
+            sleep 5
+
+            curl -f https://flow-app.eduardbonea.com || exit 1
+
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST -H "Content-Type: application/json" -d '{"email":"test","password":"pass"}' https://flow-app.eduardbonea.com/api/auth/login)
+
+            echo "Status: $STATUS"
+
+            [[ "$STATUS" -eq 404 || "$STATUS" -ge 500 ]] && { echo "ERR Login!"; exit 1; }
+
+            echo "Deploy OK!"
+
+            echo "Deploy finished successfully!"
